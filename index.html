@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MusicBrainz Interesting Reports</title>
+
+<style>
+:root {
+    --bg: #111418;
+    --panel: #1a1f25;
+    --panel2: #222831;
+    --border: #303843;
+    --text: #eef2f6;
+    --muted: #98a3af;
+    --accent: #ba478f;
+    --link: #76b7ff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+}
+
+header h1 {
+    margin: 0 0 6px;
+    font-size: 26px;
+}
+
+header p {
+    margin: 0;
+    color: var(--muted);
+}
+
+main {
+    max-width: 1500px;
+    margin: auto;
+    padding: 22px;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1.5fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+    color: var(--muted);
+}
+
+.stats strong {
+    color: var(--text);
+}
+
+.table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+}
+
+th,
+td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+th {
+    background: var(--panel2);
+    position: sticky;
+    top: 0;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+tr:hover td {
+    background: #20262d;
+}
+
+a {
+    color: var(--link);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.rank {
+    color: var(--muted);
+    width: 70px;
+}
+
+.release-count {
+    font-weight: 700;
+    text-align: right;
+}
+
+.artist-entry {
+    margin-bottom: 3px;
+}
+
+.area {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 0;
+}
+
+button {
+    background: var(--panel2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+    border-color: var(--accent);
+}
+
+button:disabled {
+    opacity: .4;
+    cursor: default;
+}
+
+.loading {
+    padding: 60px;
+    text-align: center;
+    color: var(--muted);
+}
+
+@media (max-width: 900px) {
+    .filters {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 550px) {
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        padding: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MusicBrainz Interesting Reports</h1>
+    <p>Release Groups With the Most Releases</p>
+</header>
+
+<main>
+
+<div class="filters">
+
+    <input
+        id="releaseSearch"
+        type="search"
+        placeholder="Search release group..."
+    >
+
+    <input
+        id="artistSearch"
+        type="search"
+        placeholder="Search artist..."
+    >
+
+    <select id="areaFilter">
+        <option value="">All artist areas</option>
+    </select>
+
+    <input
+        id="minReleases"
+        type="number"
+        min="5"
+        value="5"
+        placeholder="Min releases"
+    >
+
+    <select id="pageSize">
+        <option value="25">25 per page</option>
+        <option value="50" selected>50 per page</option>
+        <option value="100">100 per page</option>
+        <option value="250">250 per page</option>
+    </select>
+
+</div>
+
+<div class="stats">
+    <span>Showing <strong id="resultCount">0</strong> release groups</span>
+    <span>Dataset: <strong id="datasetCount">0</strong></span>
+    <span>Generated: <strong id="generatedAt">...</strong></span>
+</div>
+
+<div class="table-wrap">
+
+<table>
+<thead>
+<tr>
+    <th data-sort="rank">#</th>
+    <th data-sort="release_group">Release Group</th>
+    <th data-sort="artist_credit">Artist</th>
+    <th data-sort="area">Artist Area</th>
+    <th data-sort="release_count">Releases</th>
+</tr>
+</thead>
+
+<tbody id="results">
+<tr>
+    <td colspan="5" class="loading">Loading report...</td>
+</tr>
+</tbody>
+
+</table>
+
+</div>
+
+<div class="pagination">
+    <button id="prev">Previous</button>
+    <span id="pageInfo"></span>
+    <button id="next">Next</button>
+</div>
+
+</main>
+
+<script>
+let allData = [];
+let filteredData = [];
+
+let page = 1;
+let pageSize = 50;
+
+let sortField = "release_count";
+let sortDirection = "desc";
+
+const releaseSearch = document.getElementById("releaseSearch");
+const artistSearch = document.getElementById("artistSearch");
+const areaFilter = document.getElementById("areaFilter");
+const minReleases = document.getElementById("minReleases");
+const pageSizeSelect = document.getElementById("pageSize");
+
+const tbody = document.getElementById("results");
+
+const resultCount = document.getElementById("resultCount");
+const datasetCount = document.getElementById("datasetCount");
+const generatedAt = document.getElementById("generatedAt");
+
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+const pageInfo = document.getElementById("pageInfo");
+
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function getAreas(row) {
+    if (!row.artists) return [];
+
+    return row.artists
+        .map(a => a.area)
+        .filter(Boolean);
+}
+
+
+function populateAreas() {
+
+    const areas = new Set();
+
+    for (const row of allData) {
+        for (const area of getAreas(row)) {
+            areas.add(area);
+        }
+    }
+
+    [...areas]
+        .sort((a, b) => a.localeCompare(b))
+        .forEach(area => {
+
+            const option = document.createElement("option");
+
+            option.value = area;
+            option.textContent = area;
+
+            areaFilter.appendChild(option);
+
+        });
+}
+
+
+function applyFilters() {
+
+    const rgSearch = releaseSearch.value.trim().toLowerCase();
+    const artist = artistSearch.value.trim().toLowerCase();
+    const area = areaFilter.value;
+
+    const minimum = Math.max(
+        5,
+        parseInt(minReleases.value || "5", 10)
+    );
+
+    filteredData = allData.filter(row => {
+
+        if (row.release_count < minimum)
+            return false;
+
+        if (
+            rgSearch &&
+            !row.release_group.toLowerCase().includes(rgSearch)
+        )
+            return false;
+
+        if (artist) {
+
+            const creditMatch =
+                row.artist_credit
+                    .toLowerCase()
+                    .includes(artist);
+
+            const artistMatch =
+                (row.artists || []).some(a =>
+                    (a.name || "")
+                        .toLowerCase()
+                        .includes(artist) ||
+                    (a.credited_name || "")
+                        .toLowerCase()
+                        .includes(artist)
+                );
+
+            if (!creditMatch && !artistMatch)
+                return false;
+        }
+
+        if (area) {
+
+            const areaMatch =
+                (row.artists || []).some(a =>
+                    a.area === area
+                );
+
+            if (!areaMatch)
+                return false;
+        }
+
+        return true;
+    });
+
+    sortData();
+
+    page = 1;
+
+    render();
+}
+
+
+function sortData() {
+
+    filteredData.sort((a, b) => {
+
+        let av;
+        let bv;
+
+        if (sortField === "release_count") {
+
+            av = a.release_count;
+            bv = b.release_count;
+
+        } else if (sortField === "area") {
+
+            av = getAreas(a).join(", ");
+            bv = getAreas(b).join(", ");
+
+        } else {
+
+            av = a[sortField] || "";
+            bv = b[sortField] || "";
+
+        }
+
+        if (typeof av === "number") {
+
+            return sortDirection === "asc"
+                ? av - bv
+                : bv - av;
+
+        }
+
+        const cmp = String(av)
+            .localeCompare(String(bv));
+
+        return sortDirection === "asc"
+            ? cmp
+            : -cmp;
+    });
+}
+
+
+function renderArtists(row) {
+
+    if (!row.artists || !row.artists.length)
+        return escapeHtml(row.artist_credit);
+
+    return row.artists.map(a => {
+
+        const name =
+            escapeHtml(a.credited_name || a.name);
+
+        const canonical =
+            escapeHtml(a.name);
+
+        const area =
+            a.area
+                ? `<div class="area">${escapeHtml(a.area)}</div>`
+                : `<div class="area">Unknown area</div>`;
+
+        const title =
+            canonical !== name
+                ? ` title="${canonical}"`
+                : "";
+
+        return `
+            <div class="artist-entry">
+                <a
+                    href="https://musicbrainz.org/artist/${a.mbid}"
+                    target="_blank"
+                    rel="noopener"
+                    ${title}
+                >${name}</a>
+                ${area}
+            </div>
+        `;
+
+    }).join("");
+}
+
+
+function render() {
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(filteredData.length / pageSize)
+        );
+
+    if (page > totalPages)
+        page = totalPages;
+
+    const start =
+        (page - 1) * pageSize;
+
+    const rows =
+        filteredData.slice(
+            start,
+            start + pageSize
+        );
+
+    if (!rows.length) {
+
+        tbody.innerHTML =
+            `<tr>
+                <td colspan="5" class="loading">
+                    No matching release groups
+                </td>
+            </tr>`;
+
+    } else {
+
+        tbody.innerHTML =
+            rows.map((row, index) => {
+
+                const rank =
+                    start + index + 1;
+
+                const areas =
+                    getAreas(row);
+
+                const uniqueAreas =
+                    [...new Set(areas)];
+
+                return `
+                <tr>
+
+                    <td class="rank">
+                        ${rank.toLocaleString()}
+                    </td>
+
+                    <td>
+                        <a
+                            href="https://musicbrainz.org/release-group/${row.release_group_mbid}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            ${escapeHtml(row.release_group)}
+                        </a>
+                    </td>
+
+                    <td>
+                        ${renderArtists(row)}
+                    </td>
+
+                    <td>
+                        ${
+                            uniqueAreas.length
+                                ? uniqueAreas
+                                    .map(escapeHtml)
+                                    .join("<br>")
+                                : "—"
+                        }
+                    </td>
+
+                    <td class="release-count">
+                        ${row.release_count.toLocaleString()}
+                    </td>
+
+                </tr>
+                `;
+
+            }).join("");
+    }
+
+    resultCount.textContent =
+        filteredData.length.toLocaleString();
+
+    pageInfo.textContent =
+        `Page ${page.toLocaleString()} of ${totalPages.toLocaleString()}`;
+
+    prev.disabled =
+        page <= 1;
+
+    next.disabled =
+        page >= totalPages;
+}
+
+
+let filterTimer;
+
+function delayedFilter() {
+
+    clearTimeout(filterTimer);
+
+    filterTimer =
+        setTimeout(applyFilters, 150);
+}
+
+
+releaseSearch.addEventListener(
+    "input",
+    delayedFilter
+);
+
+artistSearch.addEventListener(
+    "input",
+    delayedFilter
+);
+
+minReleases.addEventListener(
+    "input",
+    delayedFilter
+);
+
+areaFilter.addEventListener(
+    "change",
+    applyFilters
+);
+
+pageSizeSelect.addEventListener(
+    "change",
+    () => {
+
+        pageSize =
+            parseInt(
+                pageSizeSelect.value,
+                10
+            );
+
+        page = 1;
+
+        render();
+    }
+);
+
+
+prev.addEventListener(
+    "click",
+    () => {
+
+        if (page > 1) {
+
+            page--;
+
+            render();
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    }
+);
+
+
+next.addEventListener(
+    "click",
+    () => {
+
+        const pages =
+            Math.ceil(
+                filteredData.length /
+                pageSize
+            );
+
+        if (page < pages) {
+
+            page++;
+
+            render();
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    }
+);
+
+
+document
+    .querySelectorAll("th[data-sort]")
+    .forEach(th => {
+
+        th.addEventListener(
+            "click",
+            () => {
+
+                const field =
+                    th.dataset.sort;
+
+                if (field === "rank")
+                    return;
+
+                if (sortField === field) {
+
+                    sortDirection =
+                        sortDirection === "asc"
+                            ? "desc"
+                            : "asc";
+
+                } else {
+
+                    sortField = field;
+
+                    sortDirection =
+                        field === "release_count"
+                            ? "desc"
+                            : "asc";
+                }
+
+                sortData();
+
+                page = 1;
+
+                render();
+            }
+        );
+
+    });
+
+
+async function loadData() {
+
+    try {
+
+        const response =
+            await fetch(
+                "data/release-groups.json"
+            );
+
+        if (!response.ok)
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        const report =
+            await response.json();
+
+        allData =
+            report.data || [];
+
+        datasetCount.textContent =
+            allData.length.toLocaleString();
+
+        generatedAt.textContent =
+            new Date(
+                report.generated_at
+            ).toLocaleString();
+
+        populateAreas();
+
+        applyFilters();
+
+    } catch (error) {
+
+        tbody.innerHTML =
+            `<tr>
+                <td colspan="5" class="loading">
+                    Failed to load report:
+                    ${escapeHtml(error.message)}
+                </td>
+            </tr>`;
+
+        console.error(error);
+    }
+}
+
+
+loadData();
+</script>
+
+</body>
+</html>
