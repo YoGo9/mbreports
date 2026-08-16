@@ -235,9 +235,10 @@ button:disabled {
 </div>
 
 <div class="stats">
-    <span>Showing <strong id="resultCount">0</strong> release groups</span>
-    <span>Dataset: <strong id="datasetCount">0</strong></span>
-    <span>Generated: <strong id="generatedAt">...</strong></span>
+    <span>Matching: <strong id="resultCount">0</strong> of <strong id="datasetCount">0</strong> release groups</span>
+    <span>Last replication: <strong id="replicationAt">...</strong></span>
+    <span>Packet: <strong id="replicationSequence">...</strong></span>
+    <span>Report generated: <strong id="generatedAt">...</strong></span>
 </div>
 
 <div class="table-wrap">
@@ -291,6 +292,8 @@ const tbody = document.getElementById("results");
 
 const resultCount = document.getElementById("resultCount");
 const datasetCount = document.getElementById("datasetCount");
+const replicationAt = document.getElementById("replicationAt");
+const replicationSequence = document.getElementById("replicationSequence");
 const generatedAt = document.getElementById("generatedAt");
 
 const prev = document.getElementById("prev");
@@ -742,6 +745,18 @@ async function loadData() {
 
         datasetCount.textContent =
             allData.length.toLocaleString();
+
+        replicationAt.textContent =
+            report.replication_applied_at
+                ? new Date(
+                    report.replication_applied_at
+                ).toLocaleString()
+                : "Unknown";
+
+        replicationSequence.textContent =
+            report.replication_sequence != null
+                ? String(report.replication_sequence)
+                : "Unknown";
 
         generatedAt.textContent =
             new Date(
