@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Possible Duplicate Artists</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  color-scheme:dark;
+  --bg:#0f1115;
+  --panel:#171a21;
+  --panel2:#1d2129;
+  --border:#2b313b;
+  --text:#f1f3f5;
+  --muted:#9aa4b2;
+  --accent:#55b7d8;
+  --chip:#222833;
+  --chip-border:#353d49;
+  --active:#f1f3f5;
+  --active-text:#111318;
+}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text)
+}
+
+header{
+  border-bottom:1px solid var(--border);
+  background:#12151a;
+  padding:16px 14px
+}
+
+.wrap{
+  max-width:1200px;
+  margin:auto
+}
+
+h1{
+  margin:0 0 4px;
+  font-size:24px
+}
+
+.sub{
+  color:var(--muted);
+  font-size:13px
+}
+
+.controls{
+  max-width:1200px;
+  margin:12px auto;
+  padding:0 10px
+}
+
+.search{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--panel);
+  color:var(--text);
+  font-size:15px;
+  outline:none
+}
+
+.search:focus{
+  border-color:#596575
+}
+
+.filter-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px
+}
+
+button{
+  border:1px solid var(--chip-border);
+  background:var(--chip);
+  color:var(--text);
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:13px;
+  cursor:pointer
+}
+
+button.active{
+  background:var(--active);
+  color:var(--active-text);
+  border-color:var(--active)
+}
+
+.status{
+  margin-top:9px;
+  color:var(--muted);
+  font-size:12px
+}
+
+main{
+  max-width:1200px;
+  margin:auto;
+  padding:0 10px 40px
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 11px;
+  margin-bottom:7px
+}
+
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-bottom:7px
+}
+
+.score{
+  font-size:12px;
+  font-weight:700;
+  color:#d7dde5
+}
+
+.confidence{
+  font-size:11px;
+  font-weight:700;
+  background:var(--chip);
+  border:1px solid var(--chip-border);
+  border-radius:999px;
+  padding:3px 7px
+}
+
+.artist-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0
+}
+
+.artist-name{
+  color:var(--accent);
+  font-size:16px;
+  font-weight:750;
+  text-decoration:none;
+  overflow-wrap:anywhere
+}
+
+.artist-name:hover{
+  text-decoration:underline
+}
+
+.arrow{
+  color:#7f8996;
+  flex:0 0 auto
+}
+
+.evidence-line{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:5px;
+  margin-top:7px
+}
+
+.service-pill{
+  border:1px solid var(--chip-border);
+  background:var(--panel2);
+  border-radius:999px;
+  padding:3px 7px;
+  font-size:11px;
+  color:#dce2e8
+}
+
+.meta{
+  color:var(--muted);
+  font-size:11px;
+  margin-left:2px
+}
+
+.details-toggle{
+  margin-left:auto;
+  border:0;
+  padding:2px 4px;
+  background:transparent;
+  color:var(--accent);
+  border-radius:0;
+  font-size:11px
+}
+
+.details-toggle:hover{
+  text-decoration:underline
+}
+
+.evidence{
+  display:none;
+  margin-top:8px;
+  padding-top:7px;
+  border-top:1px solid var(--border)
+}
+
+.evidence.open{
+  display:block
+}
+
+.service-block{
+  margin:5px 0 7px
+}
+
+.service-title{
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:2px
+}
+
+.service-link{
+  display:block;
+  font-size:11px;
+  color:#8fcce1;
+  text-decoration:none;
+  overflow-wrap:anywhere;
+  margin:2px 0
+}
+
+.service-link:hover{
+  text-decoration:underline
+}
+
+.warning{
+  color:#d8a959;
+  margin-left:4px
+}
+
+.load-more{
+  display:block;
+  margin:15px auto;
+  padding:8px 14px
+}
+
+@media(max-width:700px){
+  header{
+    padding:14px 10px
+  }
+
+  h1{
+    font-size:21px
+  }
+
+  .card{
+    padding:9px
+  }
+
+  .artist-line{
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:5px
+  }
+
+  .artist-name{
+    font-size:15px
+  }
+
+  .arrow{
+    line-height:1.4
+  }
+
+  .details-toggle{
+    margin-left:0
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Possible Duplicate Artists</h1>
+    <div class="sub" id="subtitle">Loading report…</div>
+  </div>
+</header>
+
+<div class="controls">
+
+  <input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="Search artist name or MBID"
+  >
+
+  <div class="filter-row" id="confidenceFilters">
+    <button class="active" data-confidence="All">All</button>
+    <button data-confidence="Strong">Strong</button>
+    <button data-confidence="Likely">Likely</button>
+    <button data-confidence="Possible">Possible</button>
+  </div>
+
+  <div class="filter-row" id="serviceFilters">
+    <button class="active" data-service="All">All services</button>
+    <button data-service="Wikidata">Wikidata</button>
+    <button data-service="Spotify">Spotify</button>
+    <button data-service="Deezer">Deezer</button>
+    <button data-service="Discogs">Discogs</button>
+  </div>
+
+  <div class="filter-row" id="minimumFilters">
+    <button data-min="1">1+</button>
+    <button data-min="2">2+</button>
+    <button class="active" data-min="3">3+</button>
+    <button data-min="4">4</button>
+  </div>
+
+  <div class="filter-row">
+    <button id="differentNames">Different names only</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+</div>
+
+<main id="results"></main>
+
+<script>
+let rows = [];
+let confidenceFilter = "All";
+let serviceFilter = "All";
+let minimumServices = 3;
+let differentNamesOnly = false;
+
+const PAGE_SIZE = 200;
+let shownLimit = PAGE_SIZE;
+
+function esc(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
+}
+
+function normalizeName(s){
+  return String(s ?? "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/\p{M}/gu,"")
+    .replace(/[^a-z0-9]+/g,"")
+    .trim();
+}
+
+function matchesFilters(r){
+  const q = document.getElementById("search").value.trim().toLowerCase();
+
+  const searchable = [
+    r.artist1_name,
+    r.artist1_mbid,
+    r.artist2_name,
+    r.artist2_mbid
+  ].join(" ").toLowerCase();
+
+  if(q && !searchable.includes(q)) return false;
+
+  if(
+    confidenceFilter !== "All" &&
+    r.confidence !== confidenceFilter
+  ) return false;
+
+  if(r.shared_service_count < minimumServices) return false;
+
+  if(serviceFilter !== "All"){
+    const services = r.shared_services.map(s => s.service);
+    if(!services.includes(serviceFilter)) return false;
+  }
+
+  if(
+    differentNamesOnly &&
+    normalizeName(r.artist1_name) === normalizeName(r.artist2_name)
+  ) return false;
+
+  return true;
+}
+
+function pillHtml(s){
+  const suffix = s.url_count > 1 ? ` ×${s.url_count}` : "";
+  return `<span class="service-pill">${esc(s.service)}${suffix}</span>`;
+}
+
+function evidenceHtml(r){
+  return r.shared_services.map(s => {
+    const links = s.urls.map(entry => {
+      const warning =
+        entry.linked_artist_count > 2
+          ? `<span class="warning">shared by ${entry.linked_artist_count} artists</span>`
+          : "";
+
+      return `
+        <a
+          class="service-link"
+          href="${esc(entry.url)}"
+          target="_blank"
+          rel="noopener"
+        >
+          ${esc(entry.url)}
+          ${warning}
+        </a>
+      `;
+    }).join("");
+
+    return `
+      <div class="service-block">
+        <div class="service-title">${esc(s.service)}</div>
+        ${links}
+      </div>
+    `;
+  }).join("");
+}
+
+function cardHtml(r, index){
+  return `
+    <article class="card">
+
+      <div class="card-head">
+        <div class="score">Score ${r.evidence_score}</div>
+        <div class="confidence">${esc(r.confidence)}</div>
+      </div>
+
+      <div class="artist-line">
+        <a
+          class="artist-name"
+          href="https://musicbrainz.org/artist/${esc(r.artist1_mbid)}"
+          target="_blank"
+          rel="noopener"
+        >${esc(r.artist1_name)}</a>
+
+        <span class="arrow">↔</span>
+
+        <a
+          class="artist-name"
+          href="https://musicbrainz.org/artist/${esc(r.artist2_mbid)}"
+          target="_blank"
+          rel="noopener"
+        >${esc(r.artist2_name)}</a>
+      </div>
+
+      <div class="evidence-line">
+        ${r.shared_services.map(pillHtml).join("")}
+
+        <span class="meta">
+          ${r.shared_service_count} services · ${r.shared_url_count} URLs
+        </span>
+
+        <button
+          class="details-toggle"
+          onclick="toggleEvidence(${index}, this)"
+        >evidence</button>
+      </div>
+
+      <div class="evidence" id="evidence-${index}">
+        ${evidenceHtml(r)}
+      </div>
+
+    </article>
+  `;
+}
+
+function render(){
+  const filtered = rows.filter(matchesFilters);
+  const visible = filtered.slice(0, shownLimit);
+
+  document.getElementById("status").textContent =
+    `${visible.length.toLocaleString()} shown · ${filtered.length.toLocaleString()} matching · ${rows.length.toLocaleString()} total`;
+
+  let html = visible.map((r,i) => cardHtml(r,i)).join("");
+
+  if(visible.length < filtered.length){
+    html += `
+      <button class="load-more" onclick="showMore()">
+        Show 200 more
+      </button>
+    `;
+  }
+
+  document.getElementById("results").innerHTML = html;
+}
+
+function toggleEvidence(index, button){
+  const el = document.getElementById(`evidence-${index}`);
+  const open = el.classList.toggle("open");
+  button.textContent = open ? "hide" : "evidence";
+}
+
+function showMore(){
+  shownLimit += PAGE_SIZE;
+  render();
+}
+
+function resetLimit(){
+  shownLimit = PAGE_SIZE;
+  render();
+}
+
+document.getElementById("search")
+  .addEventListener("input", resetLimit);
+
+document.querySelectorAll("[data-confidence]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-confidence]")
+      .forEach(b => b.classList.remove("active"));
+
+    btn.classList.add("active");
+    confidenceFilter = btn.dataset.confidence;
+    resetLimit();
+  });
+});
+
+document.querySelectorAll("[data-service]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-service]")
+      .forEach(b => b.classList.remove("active"));
+
+    btn.classList.add("active");
+    serviceFilter = btn.dataset.service;
+    resetLimit();
+  });
+});
+
+document.querySelectorAll("[data-min]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-min]")
+      .forEach(b => b.classList.remove("active"));
+
+    btn.classList.add("active");
+    minimumServices = Number(btn.dataset.min);
+    resetLimit();
+  });
+});
+
+document.getElementById("differentNames")
+  .addEventListener("click", e => {
+    differentNamesOnly = !differentNamesOnly;
+    e.currentTarget.classList.toggle("active", differentNamesOnly);
+    resetLimit();
+  });
+
+fetch("data/duplicate-artists.json")
+  .then(r => r.json())
+  .then(data => {
+    rows = data.data || [];
+
+    document.getElementById("subtitle").textContent =
+      `${Number(data.count).toLocaleString()} candidate pairs · generated ${new Date(data.generated_at).toLocaleString()}`;
+
+    render();
+  })
+  .catch(err => {
+    document.getElementById("subtitle").textContent =
+      "Failed to load report data.";
+    console.error(err);
+  });
+</script>
+
+</body>
+</html>
