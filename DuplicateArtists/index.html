@@ -460,6 +460,11 @@ function cardHtml(r, index){
           class="details-toggle"
           onclick="toggleEvidence(${index}, this)"
         >evidence</button>
+
+        <button
+          class="details-toggle"
+          onclick="copyEvidence(${index}, this)"
+        >copy</button>
       </div>
 
       <div class="evidence" id="evidence-${index}">
@@ -494,6 +499,29 @@ function toggleEvidence(index, button){
   const el = document.getElementById(`evidence-${index}`);
   const open = el.classList.toggle("open");
   button.textContent = open ? "hide" : "evidence";
+}
+
+async function copyEvidence(index, button){
+  const filtered = rows.filter(matchesFilters);
+  const r = filtered[index];
+
+  if(!r) return;
+
+  const urls = r.shared_services
+    .flatMap(service => service.urls.map(entry => entry.url));
+
+  const text = [...new Set(urls)].join("\n");
+
+  try{
+    await navigator.clipboard.writeText(text);
+    const old = button.textContent;
+    button.textContent = "copied";
+    setTimeout(() => {
+      button.textContent = old;
+    }, 1200);
+  }catch(err){
+    console.error("Copy failed:", err);
+  }
 }
 
 function showMore(){
