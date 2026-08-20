@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Most-Commented Edits</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --border:#2a313c;
+    --text:#dbe1e8; --muted:#7d8896; --accent:#ff8a3d;
+    --accent-dim:#5a3a22; --applied:#3fb950; --open:#58a6ff; --other:#9e7bd6;
+    --row-hover:#1c232c; --mono:"SF Mono",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text); margin:0; padding:24px;
+    font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  h1{
+    font-size:18px; font-weight:600; margin:0 0 4px; letter-spacing:.2px;
+  }
+  .sub{color:var(--muted); margin:0 0 18px; font-size:12.5px;}
+  .panel{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:16px; margin-bottom:16px;
+  }
+  .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
+  .row + .row{margin-top:10px;}
+  label{color:var(--muted); font-size:12px; margin-right:6px;}
+  input[type=text], select, input[type=number]{
+    background:#0b0e13; border:1px solid var(--border); color:var(--text);
+    padding:6px 10px; border-radius:6px; font-size:13px; font-family:inherit;
+  }
+  input[type=text]:focus, select:focus{outline:1px solid var(--accent); border-color:var(--accent);}
+  button{
+    background:#1f2630; border:1px solid var(--border); color:var(--text);
+    padding:6px 12px; border-radius:6px; font-size:12.5px; cursor:pointer;
+  }
+  button:hover{border-color:var(--accent); color:var(--accent);}
+  button:disabled{opacity:.35; cursor:default; border-color:var(--border); color:var(--muted);}
+  .stats{display:flex; gap:22px; flex-wrap:wrap;}
+  .stat{min-width:90px;}
+  .stat .n{font-family:var(--mono); font-size:19px; font-weight:600;}
+  .stat .l{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.5px;}
+  table{width:100%; border-collapse:collapse; font-size:13px; table-layout:fixed;}
+  thead th{
+    text-align:left; padding:9px 10px; color:var(--muted); font-weight:600;
+    font-size:11.5px; text-transform:uppercase; letter-spacing:.4px;
+    border-bottom:1px solid var(--border); cursor:pointer; user-select:none;
+    white-space:nowrap; position:sticky; top:0; background:var(--panel);
+  }
+  thead th:hover{color:var(--text);}
+  thead th.active{color:var(--accent);}
+  tbody td{padding:8px 10px; border-bottom:1px solid #1d242e; font-family:var(--mono); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  tbody tr:hover{background:var(--row-hover);}
+  tbody tr.empty td{font-family:inherit; color:var(--muted); text-align:center; padding:30px;}
+  a{color:var(--text); text-decoration:none;}
+  a:hover{color:var(--accent); text-decoration:underline;}
+  .bar-cell{display:flex; align-items:center; gap:8px;}
+  .bar-track{width:90px; height:6px; background:#1d242e; border-radius:3px; overflow:hidden;}
+  .bar-fill{height:100%; background:linear-gradient(90deg,var(--accent-dim),var(--accent));}
+  .badge{
+    display:inline-block; padding:2px 8px; border-radius:99px; font-size:11px;
+    font-family:inherit; font-weight:600;
+  }
+  .badge.applied{background:#13301c; color:var(--applied);}
+  .badge.open{background:#102233; color:var(--open);}
+  .badge.failed{background:#3a1414; color:#ff7b7b;}
+  .badge.cancelled{background:#262b33; color:var(--muted);}
+  .badge.other{background:#2a2240; color:var(--other);}
+  .count-pill{
+    font-family:var(--mono); font-size:12px; color:var(--muted);
+  }
+  .footer-note{color:var(--muted); font-size:11.5px; margin-top:10px;}
+</style>
+</head>
+<body>
+
+<h1>Most-Commented Edits</h1>
+<p class="sub">MusicBrainz edits ranked by edit-note count.</p>
+
+<div class="panel" id="statusPanel">
+  <p id="statusText" style="margin:0; color:var(--muted); text-align:center; padding:20px 0;">Loading edits&hellip;</p>
+</div>
+
+<div class="panel" id="statsPanel" style="display:none">
+  <div class="stats">
+    <div class="stat"><div class="n" id="statTotal">-</div><div class="l">Edits loaded</div></div>
+    <div class="stat"><div class="n" id="statShown">-</div><div class="l">Shown</div></div>
+    <div class="stat"><div class="n" id="statMax">-</div><div class="l">Max comments</div></div>
+    <div class="stat"><div class="n" id="statMin">-</div><div class="l">Min comments</div></div>
+    <div class="stat"><div class="n" id="statMedian">-</div><div class="l">Median comments</div></div>
+  </div>
+</div>
+
+<div class="panel" id="controlsPanel" style="display:none">
+  <div class="row">
+    <div>
+      <label for="search">Search edit/editor ID, editor name, or type</label>
+      <input type="text" id="search" placeholder="e.g. 65432649, an editor, or merge" style="width:240px">
+    </div>
+    <div>
+      <label for="statusFilter">Status</label>
+      <select id="statusFilter">
+        <option value="">All</option>
+        <option value="2">Applied</option>
+        <option value="1">Open</option>
+        <option value="3">Failed vote</option>
+        <option value="4">Failed dependency</option>
+        <option value="5">Error</option>
+        <option value="6">Failed prerequisite</option>
+        <option value="9">Cancelled</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div>
+      <label for="typeFilter">Edit type</label>
+      <select id="typeFilter">
+        <option value="">All types</option>
+      </select>
+    </div>
+    <div>
+      <label for="minComments">Min comments</label>
+      <input type="number" id="minComments" placeholder="0" style="width:80px">
+    </div>
+    <div>
+      <label for="yearFilter">Year</label>
+      <select id="yearFilter">
+        <option value="">All years</option>
+      </select>
+    </div>
+    <div style="margin-left:auto">
+      <button id="exportCsv">Export CSV</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="tablePanel" style="display:none; overflow:auto; max-height:75vh; padding:0">
+  <table>
+    <colgroup>
+      <col style="width:4%">
+      <col style="width:12%">
+      <col style="width:16%">
+      <col style="width:20%">
+      <col style="width:26%">
+      <col style="width:12%">
+      <col style="width:10%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th data-key="rank">#</th>
+        <th data-key="edit_id">Edit ID</th>
+        <th data-key="comment_count">Comments</th>
+        <th data-key="editor_id">Editor</th>
+        <th data-key="edit_type">Type</th>
+        <th data-key="edit_status">Status</th>
+        <th data-key="open_time">Opened</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div class="row" id="paginationRow" style="display:none; justify-content:space-between">
+  <span class="count-pill" id="pageInfo"></span>
+  <div>
+    <button id="prevPage">&larr; Prev</button>
+    <button id="nextPage">Next &rarr;</button>
+  </div>
+</div>
+
+<p class="footer-note" id="footerNote"></p>
+
+<script>
+let rows = [];
+let sortKey = "comment_count";
+let sortDir = -1; // -1 desc, 1 asc
+let editorNames = {};
+let currentPage = 1;
+const PAGE_SIZE = 100; // keeps the DOM small regardless of total row count -
+                        // 20k <tr> elements at once is what made it "load for a minute"
+
+const $ = (id) => document.getElementById(id);
+
+function parseDate(s){
+  if(!s) return null;
+  // Postgres dumps a 2-digit tz offset like '+00' or '-05' with no colon
+  // or minutes ('2019-11-24 00:13:26.440547+00'). The JS Date constructor
+  // silently fails to parse that (returns Invalid Date) unless it's
+  // padded to '+00:00' - this was why date sorting wasn't working.
+  let iso = s.replace(" ", "T").replace(/([+-]\d{2})$/, "$1:00");
+  const d = new Date(iso);
+  return isNaN(d) ? null : d;
+}
+
+function openYear(r){
+  if(!r.open_time) return null;
+  // Cheap and safe: MusicBrainz timestamps always start 'YYYY-...'
+  return r.open_time.slice(0, 4);
+}
+
+const STATUS_INFO = {
+  1: {label: "open", cls: "open"},
+  2: {label: "applied", cls: "applied"},
+  3: {label: "failed vote", cls: "failed"},
+  4: {label: "failed dependency", cls: "failed"},
+  5: {label: "error", cls: "failed"},
+  6: {label: "failed prerequisite", cls: "failed"},
+  9: {label: "cancelled", cls: "cancelled"},
+};
+
+const EDIT_TYPE_NAMES = {
+  "1": "Add artist", "2": "Edit artist", "3": "Remove artist", "4": "Merge artists",
+  "5": "Add artist annotation", "6": "Add artist alias", "7": "Remove artist alias",
+  "8": "Edit artist alias", "9": "Edit artist credit",
+  "10": "Add label", "11": "Edit label", "13": "Remove label", "14": "Merge labels",
+  "15": "Add label annotation", "16": "Add label alias", "17": "Remove label alias",
+  "18": "Edit label alias",
+  "20": "Add release group", "21": "Edit release group", "22": "Set release group cover art",
+  "23": "Remove release group", "24": "Merge release groups", "25": "Add release group annotation",
+  "26": "Add release group alias", "27": "Remove release group alias", "28": "Edit release group alias",
+  "31": "Add release", "32": "Edit release", "33": "Move release", "34": "Add release label",
+  "35": "Add release annotation", "36": "Remove release label", "37": "Edit release label",
+  "38": "Change release quality", "39": "Edit release barcodes",
+  "310": "Remove release", "311": "Merge releases", "312": "Edit release artist",
+  "313": "Reorder mediums", "314": "Add cover art", "315": "Remove cover art",
+  "316": "Edit cover art", "317": "Reorder cover art", "318": "Add release alias",
+  "319": "Remove release alias", "320": "Edit release alias",
+  "41": "Add work", "42": "Edit work", "43": "Remove work", "44": "Merge works",
+  "45": "Add work annotation", "46": "Add work alias", "47": "Remove work alias",
+  "48": "Edit work alias", "49": "Add ISWCs", "410": "Remove ISWC",
+  "51": "Add medium", "52": "Edit medium", "53": "Remove medium", "54": "Remove Disc ID",
+  "55": "Add Disc ID", "56": "Move Disc ID", "58": "Set track lengths",
+  "61": "Add place", "62": "Edit place", "63": "Remove place", "64": "Merge places",
+  "65": "Add place annotation", "66": "Add place alias", "67": "Remove place alias",
+  "68": "Edit place alias",
+  "71": "Add recording", "72": "Edit recording", "73": "Remove recording",
+  "74": "Merge recordings", "75": "Add recording annotation", "76": "Add ISRCs",
+  "78": "Remove ISRC", "711": "Add recording alias", "712": "Remove recording alias",
+  "713": "Edit recording alias",
+  "81": "Add area", "82": "Edit area", "83": "Remove area", "84": "Merge areas",
+  "85": "Add area annotation", "86": "Add area alias", "87": "Remove area alias",
+  "88": "Edit area alias",
+  "90": "Add relationship", "91": "Edit relationship", "92": "Remove relationship",
+  "93": "Remove relationship type", "94": "Remove relationship attribute",
+  "95": "Edit relationship type", "96": "Add relationship type", "97": "Edit relationship attribute",
+  "98": "Add relationship attribute", "99": "Reorder relationships",
+  "101": "Edit URL", "120": "Change WikiDoc",
+  "131": "Add instrument", "132": "Edit instrument", "133": "Remove instrument",
+  "134": "Merge instruments", "135": "Add instrument annotation", "136": "Add instrument alias",
+  "137": "Remove instrument alias", "138": "Edit instrument alias",
+  "140": "Add series", "141": "Edit series", "142": "Remove series", "143": "Merge series",
+  "144": "Add series annotation", "145": "Add series alias", "146": "Remove series alias",
+  "147": "Edit series alias",
+  "150": "Add event", "151": "Edit event", "152": "Remove event", "153": "Merge events",
+  "154": "Add event annotation", "155": "Add event alias", "156": "Remove event alias",
+  "157": "Edit event alias", "158": "Add event art", "159": "Remove event art",
+  "1510": "Edit event art", "1511": "Reorder event art",
+  "160": "Add genre", "161": "Edit genre", "162": "Remove genre", "164": "Add genre annotation",
+  "165": "Add genre alias", "166": "Remove genre alias", "167": "Edit genre alias",
+};
+
+function editTypeName(r){
+  return EDIT_TYPE_NAMES[r.edit_type] || null;
+}
+
+function editorName(r){
+  if(r.editor_id == null) return null;
+  return editorNames[String(r.editor_id)] || null;
+}
+
+function editorUrl(name){
+  // MusicBrainz profile URLs use the editor's name directly as the
+  // slug (it IS the username), so this is just the name we already
+  // resolved from editor_sanitized, no extra lookup needed.
+  return `https://musicbrainz.org/user/${encodeURIComponent(name)}`;
+}
+
+function statusBadge(row){
+  const info = STATUS_INFO[row.edit_status];
+  if(info) return `<span class="badge ${info.cls}">${info.label}</span>`;
+  return `<span class="badge other">status ${row.edit_status ?? "?"}</span>`;
+}
+
+function loadData(json){
+  currentPage = 1;
+  rows = json.map(r => ({...r, _openDate: parseDate(r.open_time), _year: openYear(r)}));
+
+  const years = [...new Set(rows.map(r => r._year).filter(Boolean))].sort((a,b) => b - a);
+  const yearSelect = $("yearFilter");
+  yearSelect.innerHTML = '<option value="">All years</option>' +
+    years.map(y => `<option value="${y}">${y}</option>`).join("");
+
+  const typeCounts = new Map();
+  rows.forEach(r => {
+    const key = String(r.edit_type ?? "");
+    if(!key) return;
+    typeCounts.set(key, (typeCounts.get(key) || 0) + 1);
+  });
+  const typeEntries = [...typeCounts.entries()].sort((a,b) => b[1] - a[1]);
+  const typeSelect = $("typeFilter");
+  typeSelect.innerHTML = '<option value="">All types</option>' +
+    typeEntries.map(([code, count]) => {
+      const name = EDIT_TYPE_NAMES[code] || `Type ${code}`;
+      return `<option value="${code}">${name} (${count})</option>`;
+    }).join("");
+
+  $("statusPanel").style.display = "none";
+  $("statsPanel").style.display = "block";
+  $("controlsPanel").style.display = "block";
+  $("tablePanel").style.display = "block";
+  $("footerNote").textContent =
+    "Click a row to open it on musicbrainz.org. Click a column header to sort.";
+  render();
+}
+
+function median(nums){
+  if(!nums.length) return 0;
+  const s = [...nums].sort((a,b)=>a-b);
+  const mid = Math.floor(s.length/2);
+  return s.length % 2 ? s[mid] : Math.round((s[mid-1]+s[mid])/2*10)/10;
+}
+
+function getFiltered(){
+  const q = $("search").value.trim();
+  const statusVal = $("statusFilter").value;
+  const minC = parseInt($("minComments").value, 10);
+  const yearVal = $("yearFilter").value;
+  const typeVal = $("typeFilter").value;
+
+  return rows.filter(r => {
+    if(q){
+      const typeName = (editTypeName(r) || "").toLowerCase();
+      const edName = (editorName(r) || "").toLowerCase();
+      const hit = String(r.edit_id).includes(q)
+        || String(r.editor_id).includes(q)
+        || typeName.includes(q.toLowerCase())
+        || edName.includes(q.toLowerCase());
+      if(!hit) return false;
+    }
+    if(statusVal){
+      if(statusVal === "other"){
+        if(STATUS_INFO[r.edit_status]) return false;
+      } else if(String(r.edit_status) !== statusVal){
+        return false;
+      }
+    }
+    if(!isNaN(minC) && r.comment_count < minC) return false;
+    if(yearVal && r._year !== yearVal) return false;
+    if(typeVal && String(r.edit_type) !== typeVal) return false;
+    return true;
+  });
+}
+
+function render(){
+  const filtered = getFiltered();
+
+  filtered.sort((a,b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if(sortKey === "open_time") { av = a._openDate; bv = b._openDate; }
+    if(av == null && bv == null) return 0;
+    if(av == null) return 1;
+    if(bv == null) return -1;
+    if(av < bv) return -1 * sortDir;
+    if(av > bv) return 1 * sortDir;
+    return 0;
+  });
+
+  // Avoid Math.max(...rows.map(...)) here - spreading thousands of
+  // values as call arguments is needless overhead (and risks hitting
+  // engine argument-count limits) at this scale. A plain reduce does
+  // the same job in one pass.
+  let maxComments = 1, minComments = Infinity;
+  rows.forEach(r => {
+    if(r.comment_count > maxComments) maxComments = r.comment_count;
+    if(r.comment_count < minComments) minComments = r.comment_count;
+  });
+
+  $("statTotal").textContent = rows.length.toLocaleString();
+  $("statShown").textContent = filtered.length.toLocaleString();
+  $("statMax").textContent = rows.length ? maxComments : "-";
+  $("statMin").textContent = rows.length ? minComments : "-";
+  $("statMedian").textContent = median(rows.map(r=>r.comment_count));
+
+  document.querySelectorAll("thead th").forEach(th => {
+    th.classList.toggle("active", th.dataset.key === sortKey);
+  });
+
+  const tbody = $("tbody");
+  const paginationRow = $("paginationRow");
+
+  if(!filtered.length){
+    tbody.innerHTML = `<tr class="empty"><td colspan="7">No edits match the current filters.</td></tr>`;
+    paginationRow.style.display = "none";
+    return;
+  }
+
+  // --- Pagination: only ever render PAGE_SIZE rows into the DOM,
+  // no matter how many thousands of rows are in `filtered`. This is
+  // what actually fixes the "loads for a minute" problem - it's not
+  // the JSON fetch/parse that's slow, it's the browser laying out
+  // tens of thousands of <tr> elements at once. ---
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  currentPage = Math.min(Math.max(1, currentPage), totalPages);
+  const startIdx = (currentPage - 1) * PAGE_SIZE;
+  const endIdx = Math.min(startIdx + PAGE_SIZE, filtered.length);
+  const pageRows = filtered.slice(startIdx, endIdx);
+
+  if(filtered.length > PAGE_SIZE){
+    paginationRow.style.display = "flex";
+    $("pageInfo").textContent =
+      `Showing ${(startIdx+1).toLocaleString()}-${endIdx.toLocaleString()} of ${filtered.length.toLocaleString()} ` +
+      `(page ${currentPage} of ${totalPages})`;
+    $("prevPage").disabled = currentPage <= 1;
+    $("nextPage").disabled = currentPage >= totalPages;
+  } else {
+    paginationRow.style.display = "none";
+  }
+
+  tbody.innerHTML = pageRows.map(r => {
+    const pct = Math.max(2, Math.round(r.comment_count / maxComments * 100));
+    return `
+      <tr data-url="${r.url}">
+        <td>${r.rank ?? ""}</td>
+        <td><a href="${r.url}" target="_blank" rel="noopener">${r.edit_id}</a></td>
+        <td>
+          <div class="bar-cell">
+            <span>${r.comment_count}</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+          </div>
+        </td>
+        <td title="editor #${r.editor_id ?? "?"}">${
+          editorName(r)
+            ? `<a href="${editorUrl(editorName(r))}" target="_blank" rel="noopener">${editorName(r)}</a>`
+            : (r.editor_id != null ? "Editor #" + r.editor_id : "-")
+        }</td>
+        <td title="type ${r.edit_type ?? "?"}">${editTypeName(r) || r.edit_type || "-"}</td>
+        <td>${statusBadge(r)}</td>
+        <td>${r.open_time ? r.open_time.slice(0,10) : "-"}</td>
+      </tr>`;
+  }).join("");
+
+  tbody.querySelectorAll("tr[data-url]").forEach(tr => {
+    tr.addEventListener("click", (e) => {
+      if(e.target.tagName === "A") return;
+      window.open(tr.dataset.url, "_blank");
+    });
+  });
+}
+
+document.querySelectorAll("thead th").forEach(th => {
+  th.addEventListener("click", () => {
+    const key = th.dataset.key;
+    if(sortKey === key){ sortDir *= -1; }
+    else { sortKey = key; sortDir = key === "edit_id" || key === "editor_id" ? 1 : -1; }
+    currentPage = 1;
+    render();
+  });
+});
+
+["search","statusFilter","minComments","yearFilter","typeFilter"].forEach(id => {
+  $(id).addEventListener("input", () => { currentPage = 1; render(); });
+  $(id).addEventListener("change", () => { currentPage = 1; render(); });
+});
+
+$("prevPage").addEventListener("click", () => { currentPage--; render(); });
+$("nextPage").addEventListener("click", () => { currentPage++; render(); });
+
+$("exportCsv").addEventListener("click", () => {
+  const filtered = getFiltered();
+  const cols = ["rank","edit_id","comment_count","editor_id","editor_name","edit_type","edit_type_name","edit_status","open_time","url"];
+  const lines = [cols.join(",")];
+  filtered.forEach(r => {
+    const enriched = {...r, edit_type_name: editTypeName(r) || "", editor_name: editorName(r) || ""};
+    lines.push(cols.map(c => {
+      const v = enriched[c] ?? "";
+      return typeof v === "string" && v.includes(",") ? `"${v}"` : v;
+    }).join(","));
+  });
+  const blob = new Blob([lines.join("\n")], {type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "most_commented_edits_filtered.csv";
+  a.click();
+});
+
+// --- Load the two fixed data files. This page has no manual file
+// picker - it's meant to be hosted with edits.json and editors.json
+// sitting next to it, and just load on its own. ---
+async function tryAutoLoad(){
+  try{
+    const er = await fetch("editors.json");
+    if(er.ok) editorNames = await er.json();
+    // editors.json is optional/best-effort - if it's missing or fails,
+    // we just show "Editor #12345" instead of names. Not fatal.
+  }catch(e){ /* fine, names just won't resolve */ }
+
+  try{
+    const dr = await fetch("edits.json");
+    if(!dr.ok) throw new Error(`HTTP ${dr.status}`);
+    const data = await dr.json();
+    if(!Array.isArray(data)) throw new Error("edits.json is not a list");
+    loadData(data);
+  }catch(e){
+    $("statusText").textContent =
+      `Couldn't load edits.json (${e.message}). Make sure it's hosted in the same folder as this page.`;
+  }
+}
+tryAutoLoad();
+</script>
+</body>
+</html>
