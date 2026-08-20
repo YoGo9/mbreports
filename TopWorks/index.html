@@ -256,12 +256,13 @@ button:disabled {
     <th data-sort="artist">Writer / Composer</th>
     <th data-sort="area">Artist Area</th>
     <th data-sort="recording_count">Recordings</th>
+    <th data-sort="distinct_artist_count">Distinct Artists</th>
 </tr>
 </thead>
 
 <tbody id="results">
 <tr>
-    <td colspan="6" class="loading">
+    <td colspan="7" class="loading">
         Loading report...
     </td>
 </tr>
@@ -450,6 +451,10 @@ function sortData() {
             av = a.recording_count;
             bv = b.recording_count;
         }
+        else if (sortField === "distinct_artist_count") {
+            av = a.distinct_artist_count || 0;
+            bv = b.distinct_artist_count || 0;
+        }
         else if (sortField === "artist") {
             av = getArtistNames(a).join(", ");
             bv = getArtistNames(b).join(", ");
@@ -529,7 +534,7 @@ function render() {
     if (!rows.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="loading">
+                <td colspan="7" class="loading">
                     No matching works
                 </td>
             </tr>
@@ -582,6 +587,10 @@ function render() {
 
                     <td class="recording-count">
                         ${row.recording_count.toLocaleString()}
+                    </td>
+
+                    <td class="recording-count">
+                        ${(row.distinct_artist_count || 0).toLocaleString()}
                     </td>
 
                 </tr>
@@ -780,7 +789,7 @@ async function loadData() {
 
         tbody.innerHTML = `
             <tr>
-                <td colspan="6" class="loading">
+                <td colspan="7" class="loading">
                     Failed to load report data:
                     ${escapeHtml(error.message)}
                 </td>
