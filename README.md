@@ -8,6 +8,7 @@ Automatically generated reports from a local MusicBrainz mirror.
 | [Top Works](https://yogo9.github.io/mbreports/TopWorks/) | Daily · 1:15 AM ET |
 | [Duplicate Artists](https://yogo9.github.io/mbreports/DuplicateArtists/) | Daily · 1:30 AM ET |
 | [Missing Cover Art](https://yogo9.github.io/mbreports/MissingCoverArt/) | Daily · 1:45 AM ET |
+| [Artists Missing Basic Info](https://yogo9.github.io/mbreports/ArtistsMissingBasicInfo/) | Daily · 2:00 AM ET |
 | [Top Editors](https://yogo9.github.io/mbreports/TopEditors/) | Weekly · Sunday morning |
 | [Edit Discussions](https://yogo9.github.io/mbreports/EditDiscussions/) | Weekly · Sunday morning |
 
