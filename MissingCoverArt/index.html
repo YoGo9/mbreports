@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>MusicBrainz Releases Missing Front Cover Art</title>
+
+<style>
+:root{
+  --bg:#0e1116;
+  --panel:#161b22;
+  --border:#2a313c;
+  --text:#dbe1e8;
+  --muted:#7d8896;
+  --accent:#58a6ff;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:22px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:14px;
+}
+
+.wrap{
+  max-width:1500px;
+  margin:auto;
+}
+
+h1{
+  margin:0 0 5px;
+  font-size:21px;
+}
+
+.sub{
+  color:var(--muted);
+  margin-bottom:18px;
+}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:14px;
+  margin-bottom:14px;
+}
+
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:end;
+}
+
+.control{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+label{
+  color:var(--muted);
+  font-size:11px;
+}
+
+input,select{
+  background:#0b0e13;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:7px 9px;
+  font-size:13px;
+}
+
+input[type=search]{
+  width:230px;
+}
+
+.stats{
+  display:flex;
+  gap:24px;
+  flex-wrap:wrap;
+}
+
+.stat strong{
+  display:block;
+  font-size:19px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1050px;
+}
+
+th{
+  text-align:left;
+  color:var(--muted);
+  font-size:11px;
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+td{
+  padding:9px 10px;
+  border-bottom:1px solid #20262f;
+  vertical-align:middle;
+}
+
+tbody tr:hover{
+  background:#1c232c;
+}
+
+a{
+  color:var(--accent);
+  text-decoration:none;
+}
+
+a:hover{
+  text-decoration:underline;
+}
+
+.artist{
+  color:#b9c4d3;
+}
+
+.sources{
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap;
+  min-width:150px;
+}
+
+.source{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  border-radius:4px;
+  background:#fff;
+  overflow:hidden;
+}
+
+.source img{
+  width:16px;
+  height:16px;
+}
+
+.source.other{
+  background:#303846;
+  color:#ddd;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.num{
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+}
+
+.pagination{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:14px;
+  gap:10px;
+}
+
+button{
+  background:#1f2630;
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:6px;
+  padding:7px 12px;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.4;
+}
+
+.small{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.mobile-list{
+  display:none;
+}
+
+.mobile-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+.mobile-title{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+.mobile-artist{
+  color:#b9c4d3;
+  margin-bottom:9px;
+}
+
+.mobile-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px 10px;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:9px;
+}
+
+.mobile-source-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.mobile-source-count{
+  color:var(--muted);
+  font-size:12px;
+  white-space:nowrap;
+}
+
+@media(max-width:700px){
+
+  body{
+    padding:10px;
+    font-size:13px;
+  }
+
+  h1{
+    font-size:18px;
+  }
+
+  .sub{
+    font-size:12px;
+  }
+
+  .controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+
+  .control{
+    width:100%;
+  }
+
+  .control.search{
+    grid-column:1 / -1;
+  }
+
+  input,
+  select{
+    width:100%;
+    min-width:0;
+  }
+
+  input[type=search]{
+    width:100%;
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stats .stat:last-child{
+    grid-column:1 / -1;
+  }
+
+  .table-wrap{
+    display:none;
+  }
+
+  .mobile-list{
+    display:block;
+  }
+
+  .pagination{
+    margin-top:10px;
+  }
+
+  .pagination button{
+    padding:8px 10px;
+  }
+
+  .sources{
+    min-width:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<h1>Releases Missing Front Cover Art</h1>
+<div class="sub">
+MusicBrainz releases with no front cover image and at least one streaming, purchasing, or external release source.
+</div>
+
+<div class="panel">
+<div class="controls">
+
+<div class="control">
+<label>Year</label>
+<select id="year">
+<option value="">Loading…</option>
+</select>
+</div>
+
+<div class="control search">
+<label>Release / Artist</label>
+<input id="search" type="search" placeholder="Search…">
+</div>
+
+<div class="control">
+<label>Release type</label>
+<select id="type">
+<option value="">All</option>
+<option>Album</option>
+<option>Single</option>
+<option>EP</option>
+<option>Unknown</option>
+</select>
+</div>
+
+<div class="control">
+<label>Format</label>
+<select id="format">
+<option value="">All formats</option>
+</select>
+</div>
+
+<div class="control">
+<label>Country</label>
+<select id="country">
+<option value="">All countries</option>
+</select>
+</div>
+
+<div class="control">
+<label>Source</label>
+<select id="service">
+<option value="">All sources</option>
+</select>
+</div>
+
+<div class="control">
+<label>Minimum sources</label>
+<select id="minSources">
+<option value="1">1+</option>
+<option value="2">2+</option>
+<option value="3">3+</option>
+<option value="4">4+</option>
+<option value="5">5+</option>
+<option value="6">6+</option>
+<option value="7">7+</option>
+</select>
+</div>
+
+</div>
+</div>
+
+<div class="panel stats">
+<div class="stat">
+<strong id="matching">—</strong>
+<span>Matching releases</span>
+</div>
+
+<div class="stat">
+<strong id="total">—</strong>
+<span>Total for year</span>
+</div>
+
+<div class="stat">
+<strong id="generated">—</strong>
+<span>Generated</span>
+</div>
+</div>
+
+<div class="panel table-wrap">
+<table>
+<thead>
+<tr>
+<th data-sort="release">Release</th>
+<th data-sort="artist">Artist</th>
+<th data-sort="date">Date</th>
+<th data-sort="country">Country</th>
+<th data-sort="format">Format</th>
+<th data-sort="type">Type</th>
+<th data-sort="source_count">Sources</th>
+</tr>
+</thead>
+<tbody id="tbody">
+<tr><td colspan="7">Loading…</td></tr>
+</tbody>
+</table>
+</div>
+
+<div id="mobileList" class="mobile-list"></div>
+
+<div class="pagination">
+<div class="small" id="pageInfo"></div>
+<div>
+<button id="prev">← Previous</button>
+<button id="next">Next →</button>
+</div>
+</div>
+
+</div>
+
+<script>
+
+const PAGE_SIZE = 100;
+
+let allRows = [];
+let filteredRows = [];
+let page = 1;
+
+let sortKey = "source_count";
+let sortDir = -1;
+
+const $ = id => document.getElementById(id);
+
+const serviceInfo = {
+  spotify:       ["open.spotify.com", "Spotify"],
+  apple:         ["music.apple.com", "Apple Music"],
+  deezer:        ["deezer.com", "Deezer"],
+  tidal:         ["tidal.com", "Tidal"],
+  qobuz:         ["qobuz.com", "Qobuz"],
+  bandcamp:      ["bandcamp.com", "Bandcamp"],
+  discogs:       ["discogs.com", "Discogs"],
+  amazon:        ["amazon.com", "Amazon"],
+  youtube:       ["youtube.com", "YouTube"],
+  youtube_music: ["music.youtube.com", "YouTube Music"],
+  soundcloud:    ["soundcloud.com", "SoundCloud"],
+  beatport:      ["beatport.com", "Beatport"],
+  archive:       ["archive.org", "Internet Archive"],
+  audiomack:     ["audiomack.com", "Audiomack"],
+  yandex:        ["music.yandex.com", "Yandex Music"],
+  line:          ["music.line.me", "LINE Music"],
+  awa:           ["s.awa.fm", "AWA"],
+  anghami:       ["anghami.com", "Anghami"],
+  bugs:          ["bugs.co.kr", "Bugs"],
+  pandora:       ["pandora.com", "Pandora"],
+  melon:         ["melon.com", "Melon"]
+};
+
+function favicon(domain){
+  return "https://www.google.com/s2/favicons?domain=" +
+         encodeURIComponent(domain) +
+         "&sz=32";
+}
+
+function escapeHtml(v){
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
+}
+
+async function loadYear(){
+
+  const year = $("year").value;
+
+  $("tbody").innerHTML =
+    '<tr><td colspan="7">Loading…</td></tr>';
+
+  const response = await fetch(`data/${year}.json`);
+
+  if(!response.ok)
+    throw new Error(`Unable to load ${year}.json`);
+
+  const report = await response.json();
+
+  allRows = report.data || [];
+
+  $("total").textContent =
+    allRows.length.toLocaleString();
+
+  $("generated").textContent =
+    new Date(report.generated_at).toLocaleString();
+
+  populateFilters();
+
+  page = 1;
+
+  applyFilters();
+}
+
+function populateFilters(){
+
+  const formats =
+    [...new Set(allRows.map(r => r.format))]
+    .sort();
+
+  $("format").innerHTML =
+    '<option value="">All formats</option>' +
+    formats.map(v =>
+      `<option>${escapeHtml(v)}</option>`
+    ).join("");
+
+  const countries =
+    [...new Set(allRows.map(r => r.country))]
+    .sort();
+
+  $("country").innerHTML =
+    '<option value="">All countries</option>' +
+    countries.map(v =>
+      `<option>${escapeHtml(v)}</option>`
+    ).join("");
+
+  const services =
+    [...new Set(
+      allRows.flatMap(r =>
+        r.sources.map(s => s.service)
+      )
+    )].sort();
+
+  $("service").innerHTML =
+    '<option value="">All sources</option>' +
+    services.map(s => {
+
+      const label =
+        serviceInfo[s]?.[1] ||
+        (s === "other" ? "Other" : s);
+
+      return `<option value="${escapeHtml(s)}">${escapeHtml(label)}</option>`;
+
+    }).join("");
+}
+
+function applyFilters(){
+
+  const search =
+    $("search").value.trim().toLowerCase();
+
+  const type =
+    $("type").value;
+
+  const format =
+    $("format").value;
+
+  const country =
+    $("country").value;
+
+  const service =
+    $("service").value;
+
+  const minSources =
+    Number($("minSources").value);
+
+  filteredRows = allRows.filter(r => {
+
+    if(search){
+
+      const hay =
+        `${r.release} ${r.artist}`.toLowerCase();
+
+      if(!hay.includes(search))
+        return false;
+    }
+
+    if(type && r.type !== type)
+      return false;
+
+    if(format && r.format !== format)
+      return false;
+
+    if(country && r.country !== country)
+      return false;
+
+    if(service &&
+       !r.sources.some(s => s.service === service))
+      return false;
+
+    if(r.source_count < minSources)
+      return false;
+
+    return true;
+  });
+
+  sortRows();
+
+  $("matching").textContent =
+    filteredRows.length.toLocaleString();
+
+  const maxPage =
+    Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+
+  if(page > maxPage)
+    page = maxPage;
+
+  render();
+}
+
+function sortRows(){
+
+  filteredRows.sort((a,b) => {
+
+    let av = a[sortKey];
+    let bv = b[sortKey];
+
+    if(sortKey === "source_count"){
+      av = Number(av);
+      bv = Number(bv);
+    }
+    else{
+      av = String(av ?? "").toLowerCase();
+      bv = String(bv ?? "").toLowerCase();
+    }
+
+    if(av < bv) return -1 * sortDir;
+    if(av > bv) return  1 * sortDir;
+
+    return 0;
+  });
+}
+
+function renderSources(row){
+
+  const seen = new Set();
+
+  return row.sources
+    .filter(s => {
+
+      if(seen.has(s.service))
+        return false;
+
+      seen.add(s.service);
+      return true;
+
+    })
+    .map(s => {
+
+      const info = serviceInfo[s.service];
+
+      if(!info){
+
+        return `
+          <a class="source other"
+             href="${escapeHtml(s.url)}"
+             target="_blank"
+             rel="noopener"
+             title="Other">
+             ?
+          </a>`;
+      }
+
+      const [domain,label] = info;
+
+      return `
+        <a class="source"
+           href="${escapeHtml(s.url)}"
+           target="_blank"
+           rel="noopener"
+           title="${escapeHtml(label)}">
+          <img
+             src="${favicon(domain)}"
+             alt="${escapeHtml(label)}">
+        </a>`;
+    })
+    .join("");
+}
+
+function render(){
+
+  const start =
+    (page - 1) * PAGE_SIZE;
+
+  const rows =
+    filteredRows.slice(start, start + PAGE_SIZE);
+
+  $("tbody").innerHTML =
+    rows.length
+    ? rows.map(r => `
+
+      <tr>
+
+      <td>
+        <a href="https://musicbrainz.org/release/${escapeHtml(r.mbid)}"
+           target="_blank">
+          ${escapeHtml(r.release)}
+        </a>
+      </td>
+
+      <td class="artist">
+        ${escapeHtml(r.artist)}
+      </td>
+
+      <td>
+        ${escapeHtml(r.date)}
+      </td>
+
+      <td>
+        ${escapeHtml(r.country)}
+      </td>
+
+      <td>
+        ${escapeHtml(r.format)}
+      </td>
+
+      <td>
+        ${escapeHtml(r.type)}
+      </td>
+
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+
+          <span class="num">
+            ${r.source_count}
+          </span>
+
+          <div class="sources">
+            ${renderSources(r)}
+          </div>
+
+        </div>
+      </td>
+
+      </tr>
+
+    `).join("")
+    : '<tr><td colspan="7">No matching releases.</td></tr>';
+
+  $("mobileList").innerHTML =
+    rows.length
+    ? rows.map(r => `
+
+      <div class="mobile-card">
+
+        <div class="mobile-title">
+          <a href="https://musicbrainz.org/release/${escapeHtml(r.mbid)}"
+             target="_blank">
+            ${escapeHtml(r.release)}
+          </a>
+        </div>
+
+        <div class="mobile-artist">
+          ${escapeHtml(r.artist)}
+        </div>
+
+        <div class="mobile-meta">
+          <span>${escapeHtml(r.type)}</span>
+          <span>${escapeHtml(r.format)}</span>
+          <span>${escapeHtml(r.country)}</span>
+          <span>${escapeHtml(r.date)}</span>
+        </div>
+
+        <div class="mobile-source-row">
+
+          <div class="sources">
+            ${renderSources(r)}
+          </div>
+
+          <div class="mobile-source-count">
+            ${r.source_count} source${r.source_count === 1 ? "" : "s"}
+          </div>
+
+        </div>
+
+      </div>
+
+    `).join("")
+    : '<div class="mobile-card">No matching releases.</div>';
+
+  const pages =
+    Math.max(1,Math.ceil(filteredRows.length/PAGE_SIZE));
+
+  $("pageInfo").textContent =
+    `Page ${page.toLocaleString()} of ${pages.toLocaleString()}`;
+
+  $("prev").disabled =
+    page <= 1;
+
+  $("next").disabled =
+    page >= pages;
+}
+
+document.querySelectorAll("th[data-sort]")
+.forEach(th => {
+
+  th.addEventListener("click", () => {
+
+    const k =
+      th.dataset.sort;
+
+    if(sortKey === k)
+      sortDir *= -1;
+    else{
+      sortKey = k;
+      sortDir = k === "source_count" ? -1 : 1;
+    }
+
+    page = 1;
+
+    applyFilters();
+  });
+
+});
+
+["search","type","format","country","service","minSources"]
+.forEach(id => {
+
+  $(id).addEventListener(
+    id === "search" ? "input" : "change",
+    () => {
+      page = 1;
+      applyFilters();
+    }
+  );
+
+});
+
+$("prev").onclick = () => {
+  if(page > 1){
+    page--;
+    render();
+  }
+};
+
+$("next").onclick = () => {
+
+  const pages =
+    Math.ceil(filteredRows.length/PAGE_SIZE);
+
+  if(page < pages){
+    page++;
+    render();
+  }
+};
+
+async function init(){
+
+  const response = await fetch("data/manifest.json");
+
+  if(!response.ok)
+    throw new Error("Unable to load year manifest");
+
+  const manifest = await response.json();
+
+  const years = manifest.years || [];
+
+  $("year").innerHTML = years.map(y => {
+
+    const label =
+      y.year === "unknown"
+      ? `Unknown (${Number(y.count).toLocaleString()})`
+      : `${y.year} (${Number(y.count).toLocaleString()})`;
+
+    return `<option value="${escapeHtml(y.year)}">${label}</option>`;
+
+  }).join("");
+
+  // Prefer the current year when present.
+  const currentYear = String(new Date().getFullYear());
+
+  if(years.some(y => y.year === currentYear))
+    $("year").value = currentYear;
+
+  $("year").addEventListener("change", () => {
+    page = 1;
+    loadYear().catch(showError);
+  });
+
+  await loadYear();
+}
+
+function showError(err){
+
+  $("tbody").innerHTML =
+    `<tr><td colspan="7">${escapeHtml(err.message)}</td></tr>`;
+
+  $("mobileList").innerHTML =
+    `<div class="mobile-card">${escapeHtml(err.message)}</div>`;
+}
+
+init().catch(showError);
+
+</script>
+
+</body>
+</html>
