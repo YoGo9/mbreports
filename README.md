@@ -23,6 +23,17 @@ Currently supported:
 
 The subscription list is stored locally in your browser. Re-sync from your MusicBrainz Artist Subscriptions page whenever you want to update it.
 
+## Other Great MusicBrainz Reports
+
+A big inspiration for setting up my own MusicBrainz server and reports was [DontMindMe](https://beta.musicbrainz.org/user/DontMindMe).
+
+A few of his reports I especially like:
+
+- [Non-Canonical YouTube Links](https://unviablefriend.github.io/reports/youtube_urls_by_region.html)
+- [Wikipedia Links by Region](https://unviablefriend.github.io/reports/wikipedia_links_by_region.html)
+
+He has many more useful MusicBrainz reports as well, so definitely check out his page and projects.
+
 ---
 
 Report data is generated automatically from a replicated local MusicBrainz database and published to GitHub Pages.
