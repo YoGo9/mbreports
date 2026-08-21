@@ -322,6 +322,13 @@ main{
     <button id="differentNames">Different names only</button>
   </div>
 
+  <div class="filter-row" id="subscriptionFilters">
+    <button class="active" data-subscription="All">All artists</button>
+    <button data-subscription="Mine" id="subscriptionMine" disabled>
+      My subscriptions — sync first
+    </button>
+  </div>
+
   <div class="status" id="status"></div>
 
 </div>
@@ -334,6 +341,53 @@ let confidenceFilter = "All";
 let serviceFilter = "All";
 let minimumServices = 3;
 let differentNamesOnly = false;
+let subscriptionFilter = "All";
+
+const SUBSCRIPTION_STORAGE_KEY =
+  "mbreports_artist_subscriptions_v1";
+
+const subscribedArtists = new Set();
+
+function loadSavedSubscriptions(){
+
+  try{
+
+    const raw = localStorage.getItem(
+      SUBSCRIPTION_STORAGE_KEY
+    );
+
+    if(!raw) return;
+
+    const data = JSON.parse(raw);
+
+    if(!Array.isArray(data.mbids)) return;
+
+    for(const mbid of data.mbids){
+      subscribedArtists.add(
+        String(mbid).toLowerCase()
+      );
+    }
+
+    if(subscribedArtists.size){
+
+      const button =
+        document.getElementById("subscriptionMine");
+
+      button.disabled = false;
+
+      button.textContent =
+        `My subscriptions (${subscribedArtists.size.toLocaleString()})`;
+    }
+
+  }catch(err){
+    console.error(
+      "Could not load MusicBrainz subscriptions:",
+      err
+    );
+  }
+}
+
+loadSavedSubscriptions();
 
 const PAGE_SIZE = 200;
 let shownLimit = PAGE_SIZE;
@@ -383,6 +437,20 @@ function matchesFilters(r){
     differentNamesOnly &&
     normalizeName(r.artist1_name) === normalizeName(r.artist2_name)
   ) return false;
+
+  if(subscriptionFilter === "Mine"){
+
+    const artist1 =
+      String(r.artist1_mbid ?? "").toLowerCase();
+
+    const artist2 =
+      String(r.artist2_mbid ?? "").toLowerCase();
+
+    if(
+      !subscribedArtists.has(artist1) &&
+      !subscribedArtists.has(artist2)
+    ) return false;
+  }
 
   return true;
 }
@@ -566,6 +634,23 @@ document.querySelectorAll("[data-min]").forEach(btn => {
 
     btn.classList.add("active");
     minimumServices = Number(btn.dataset.min);
+    resetLimit();
+  });
+});
+
+document.querySelectorAll("[data-subscription]").forEach(btn => {
+  btn.addEventListener("click", () => {
+
+    if(btn.disabled) return;
+
+    document.querySelectorAll("[data-subscription]")
+      .forEach(b => b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    subscriptionFilter =
+      btn.dataset.subscription;
+
     resetLimit();
   });
 });
