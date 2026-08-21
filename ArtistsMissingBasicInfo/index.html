@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MusicBrainz Artists Missing Basic Info</title>
+
+<style>
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f5f6f8;
+  color:#222;
+}
+
+.container {
+  max-width:1500px;
+  margin:auto;
+  padding:18px;
+}
+
+h1 {
+  margin:0 0 5px;
+  font-size:28px;
+}
+
+.subtitle {
+  color:#666;
+  margin-bottom:18px;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.stat {
+  background:white;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:12px;
+}
+
+.stat strong {
+  display:block;
+  font-size:22px;
+}
+
+.stat span {
+  color:#666;
+  font-size:13px;
+}
+
+.filters {
+  display:grid;
+  grid-template-columns:2fr repeat(4,1fr);
+  gap:8px;
+  margin-bottom:14px;
+}
+
+input, select {
+  width:100%;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  background:white;
+  font:inherit;
+}
+
+.summary {
+  color:#666;
+  font-size:14px;
+  margin:8px 0 10px;
+}
+
+.table-wrap {
+  overflow-x:auto;
+  background:white;
+  border:1px solid #ddd;
+  border-radius:10px;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td {
+  padding:9px 10px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+  white-space:nowrap;
+}
+
+th {
+  background:#fafafa;
+  cursor:pointer;
+  font-size:13px;
+}
+
+td {
+  font-size:14px;
+}
+
+a {
+  color:#1769aa;
+  text-decoration:none;
+}
+
+a:hover { text-decoration:underline; }
+
+.missing {
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap;
+}
+
+.badge {
+  display:inline-block;
+  padding:3px 7px;
+  border-radius:20px;
+  background:#fee;
+  border:1px solid #ecc;
+  font-size:12px;
+}
+
+.wikidata {
+  font-weight:600;
+}
+
+.pagination {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:16px;
+}
+
+button {
+  padding:8px 14px;
+  border:1px solid #bbb;
+  border-radius:7px;
+  background:white;
+  cursor:pointer;
+}
+
+button:disabled {
+  opacity:.4;
+  cursor:default;
+}
+
+.mobile-list {
+  display:none;
+}
+
+.card {
+  background:white;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:9px;
+}
+
+.card-title {
+  font-weight:700;
+  font-size:16px;
+  margin-bottom:7px;
+}
+
+.meta {
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px 12px;
+  color:#555;
+  font-size:13px;
+  margin:6px 0;
+}
+
+.links {
+  display:flex;
+  gap:14px;
+  margin-top:9px;
+  font-size:13px;
+}
+
+@media(max-width:800px) {
+  .container { padding:12px; }
+
+  h1 { font-size:22px; }
+
+  .stats {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .filters {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .filters input {
+    grid-column:1 / -1;
+  }
+
+  .table-wrap {
+    display:none;
+  }
+
+  .mobile-list {
+    display:block;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Artists Missing Basic Info</h1>
+
+<div class="subtitle">
+MusicBrainz artists with a Wikidata relationship that are missing basic artist information.
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <strong id="total">-</strong>
+    <span>Artists</span>
+  </div>
+  <div class="stat">
+    <strong id="missingType">-</strong>
+    <span>Missing type</span>
+  </div>
+  <div class="stat">
+    <strong id="missingArea">-</strong>
+    <span>Missing area</span>
+  </div>
+  <div class="stat">
+    <strong id="missingGender">-</strong>
+    <span>Persons missing gender</span>
+  </div>
+</div>
+
+<div class="filters">
+
+<input id="search"
+       placeholder="Artist name">
+
+<select id="missing">
+  <option value="">All missing fields</option>
+  <option value="Type">Missing type</option>
+  <option value="Area">Missing area</option>
+  <option value="Gender">Missing gender</option>
+</select>
+
+<select id="type">
+  <option value="">All artist types</option>
+</select>
+
+<select id="area">
+  <option value="">All areas</option>
+</select>
+
+<select id="minMissing">
+  <option value="1">1+ missing</option>
+  <option value="2">2+ missing</option>
+  <option value="3">3 missing</option>
+</select>
+
+</div>
+
+<div class="summary">
+  <span id="resultCount"></span>
+  · Generated <span id="generated">-</span>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th data-sort="artist">Artist</th>
+  <th data-sort="type">Type</th>
+  <th data-sort="gender">Gender</th>
+  <th data-sort="area">Area</th>
+  <th data-sort="begin_area">Begin area</th>
+  <th data-sort="begin_date">Begin date</th>
+  <th data-sort="missing_count">Missing</th>
+  <th>Wikidata</th>
+</tr>
+</thead>
+<tbody id="rows"></tbody>
+</table>
+</div>
+
+<div id="mobileRows" class="mobile-list"></div>
+
+<div class="pagination">
+<button id="prev">Previous</button>
+<span id="page"></span>
+<button id="next">Next</button>
+</div>
+
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let allRows = [];
+let filtered = [];
+let currentPage = 1;
+const pageSize = 100;
+
+let sortKey = "missing_count";
+let sortAsc = false;
+
+function escapeHtml(v) {
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;");
+}
+
+function badges(items) {
+  return (items || [])
+    .map(v => `<span class="badge">${escapeHtml(v)}</span>`)
+    .join("");
+}
+
+function populateFilters() {
+
+  const types = [...new Set(
+    allRows.map(r => r.type)
+  )].sort();
+
+  $("type").innerHTML =
+    '<option value="">All artist types</option>' +
+    types.map(v =>
+      `<option>${escapeHtml(v)}</option>`
+    ).join("");
+
+  const areas = [...new Set(
+    allRows.map(r => r.area)
+  )].sort();
+
+  $("area").innerHTML =
+    '<option value="">All areas</option>' +
+    areas.map(v =>
+      `<option>${escapeHtml(v)}</option>`
+    ).join("");
+}
+
+function applyFilters() {
+
+  const search = $("search").value.trim().toLowerCase();
+  const missing = $("missing").value;
+  const type = $("type").value;
+  const area = $("area").value;
+  const minMissing = Number($("minMissing").value);
+
+  filtered = allRows.filter(r => {
+
+    if(search &&
+       !r.artist.toLowerCase().includes(search))
+      return false;
+
+    if(missing &&
+       !(r.missing || []).includes(missing))
+      return false;
+
+    if(type && r.type !== type)
+      return false;
+
+    if(area && r.area !== area)
+      return false;
+
+    if(r.missing_count < minMissing)
+      return false;
+
+    return true;
+  });
+
+  sortRows();
+  currentPage = 1;
+  render();
+}
+
+function sortRows() {
+
+  filtered.sort((a,b) => {
+
+    let av = a[sortKey];
+    let bv = b[sortKey];
+
+    if(typeof av === "number") {
+      return sortAsc ? av-bv : bv-av;
+    }
+
+    av = String(av ?? "").toLowerCase();
+    bv = String(bv ?? "").toLowerCase();
+
+    return sortAsc
+      ? av.localeCompare(bv)
+      : bv.localeCompare(av);
+  });
+}
+
+function render() {
+
+  const start = (currentPage - 1) * pageSize;
+  const pageRows = filtered.slice(start, start + pageSize);
+
+  $("resultCount").textContent =
+    `${filtered.length.toLocaleString()} matching artists`;
+
+  $("rows").innerHTML = pageRows.map(r => `
+    <tr>
+      <td>
+        <a href="https://musicbrainz.org/artist/${r.mbid}"
+           target="_blank">
+          ${escapeHtml(r.artist)}
+        </a>
+      </td>
+      <td>${escapeHtml(r.type)}</td>
+      <td>${escapeHtml(r.gender)}</td>
+      <td>${escapeHtml(r.area)}</td>
+      <td>${escapeHtml(r.begin_area)}</td>
+      <td>${escapeHtml(r.begin_date)}</td>
+      <td>
+        <div class="missing">${badges(r.missing)}</div>
+      </td>
+      <td>
+        <a class="wikidata"
+           href="${escapeHtml(r.wikidata)}"
+           target="_blank">
+          Wikidata
+        </a>
+      </td>
+    </tr>
+  `).join("");
+
+  $("mobileRows").innerHTML = pageRows.map(r => `
+    <div class="card">
+
+      <div class="card-title">
+        <a href="https://musicbrainz.org/artist/${r.mbid}"
+           target="_blank">
+          ${escapeHtml(r.artist)}
+        </a>
+      </div>
+
+      <div class="missing">
+        ${badges(r.missing)}
+      </div>
+
+      <div class="meta">
+        <span>Type: ${escapeHtml(r.type)}</span>
+        <span>Gender: ${escapeHtml(r.gender)}</span>
+        <span>Area: ${escapeHtml(r.area)}</span>
+      </div>
+
+      <div class="meta">
+        <span>Begin area: ${escapeHtml(r.begin_area)}</span>
+        <span>Begin: ${escapeHtml(r.begin_date)}</span>
+      </div>
+
+      <div class="links">
+        <a href="https://musicbrainz.org/artist/${r.mbid}"
+           target="_blank">MusicBrainz</a>
+
+        <a href="${escapeHtml(r.wikidata)}"
+           target="_blank">Wikidata</a>
+      </div>
+
+    </div>
+  `).join("");
+
+  const pages = Math.max(
+    1,
+    Math.ceil(filtered.length / pageSize)
+  );
+
+  $("page").textContent =
+    `Page ${currentPage.toLocaleString()} of ${pages.toLocaleString()}`;
+
+  $("prev").disabled = currentPage <= 1;
+  $("next").disabled = currentPage >= pages;
+}
+
+$("prev").onclick = () => {
+  if(currentPage > 1) {
+    currentPage--;
+    render();
+    window.scrollTo(0,0);
+  }
+};
+
+$("next").onclick = () => {
+  if(currentPage * pageSize < filtered.length) {
+    currentPage++;
+    render();
+    window.scrollTo(0,0);
+  }
+};
+
+document.querySelectorAll(
+  "#search,#missing,#type,#area,#minMissing"
+).forEach(el => {
+  el.addEventListener(
+    el.tagName === "INPUT" ? "input" : "change",
+    applyFilters
+  );
+});
+
+document.querySelectorAll("th[data-sort]").forEach(th => {
+
+  th.onclick = () => {
+
+    const key = th.dataset.sort;
+
+    if(sortKey === key)
+      sortAsc = !sortAsc;
+    else {
+      sortKey = key;
+      sortAsc = key !== "missing_count";
+    }
+
+    sortRows();
+    currentPage = 1;
+    render();
+  };
+});
+
+async function load() {
+
+  const response = await fetch(
+    `data.json?v=${Date.now()}`
+  );
+
+  const data = await response.json();
+
+  allRows = data.data || [];
+
+  $("generated").textContent =
+    data.generated || "Unknown";
+
+  $("total").textContent =
+    allRows.length.toLocaleString();
+
+  $("missingType").textContent =
+    allRows.filter(r =>
+      r.missing.includes("Type")
+    ).length.toLocaleString();
+
+  $("missingArea").textContent =
+    allRows.filter(r =>
+      r.missing.includes("Area")
+    ).length.toLocaleString();
+
+  $("missingGender").textContent =
+    allRows.filter(r =>
+      r.missing.includes("Gender")
+    ).length.toLocaleString();
+
+  populateFilters();
+
+  filtered = [...allRows];
+
+  sortRows();
+  render();
+}
+
+load();
+</script>
+
+</body>
+</html>
