@@ -1,6 +1,6 @@
 # MusicBrainz Reports
 
-Automatically generated reports from a local MusicBrainz mirror.
+Automatically generated reports from a local replicated MusicBrainz database.
 
 | Report | Schedule |
 |---|---|
@@ -12,4 +12,17 @@ Automatically generated reports from a local MusicBrainz mirror.
 | [Top Editors](https://yogo9.github.io/mbreports/TopEditors/) | Weekly · Sunday morning |
 | [Edit Discussions](https://yogo9.github.io/mbreports/EditDiscussions/) | Weekly · Sunday morning |
 
-Data is generated from a replicated local MusicBrainz database and published automatically to GitHub Pages.
+## My MusicBrainz Subscriptions
+
+Install the [Artist Subscription Sync userscript](https://yogo9.github.io/mbreports/SubscriptionSync.user.js) to sync your MusicBrainz artist subscriptions for use in supported reports.
+
+Currently supported:
+
+- [Duplicate Artists](https://yogo9.github.io/mbreports/DuplicateArtists/) — show duplicate pairs where either artist is in your subscriptions.
+- [Artists Missing Basic Info](https://yogo9.github.io/mbreports/ArtistsMissingBasicInfo/) — show only artists in your subscriptions.
+
+The subscription list is stored locally in your browser. Re-sync from your MusicBrainz Artist Subscriptions page whenever you want to update it.
+
+---
+
+Report data is generated automatically from a replicated local MusicBrainz database and published to GitHub Pages.
