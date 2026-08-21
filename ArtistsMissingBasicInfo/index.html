@@ -57,7 +57,7 @@ h1 {
 
 .filters {
   display:grid;
-  grid-template-columns:2fr repeat(4,1fr);
+  grid-template-columns:2fr repeat(5,1fr);
   gap:8px;
   margin-bottom:14px;
 }
@@ -263,6 +263,13 @@ MusicBrainz artists with a Wikidata relationship that are missing basic artist i
   <option value="">All areas</option>
 </select>
 
+<select id="subscription">
+  <option value="">All artists</option>
+  <option value="mine" disabled>
+    My subscriptions — sync userscript first
+  </option>
+</select>
+
 <select id="minMissing">
   <option value="1">1+ missing</option>
   <option value="2">2+ missing</option>
@@ -315,6 +322,49 @@ const pageSize = 100;
 let sortKey = "missing_count";
 let sortAsc = false;
 
+const SUBSCRIPTION_STORAGE_KEY =
+  "mbreports_artist_subscriptions_v1";
+
+let subscribedArtists = new Set();
+
+function loadSavedSubscriptions() {
+
+  try {
+
+    const raw =
+      localStorage.getItem(
+        SUBSCRIPTION_STORAGE_KEY
+      );
+
+    if(!raw)
+      return;
+
+    const data = JSON.parse(raw);
+
+    if(!Array.isArray(data.mbids))
+      return;
+
+    subscribedArtists = new Set(
+      data.mbids.map(v =>
+        String(v).toLowerCase()
+      )
+    );
+
+    if(subscribedArtists.size) {
+
+      $("subscription").innerHTML =
+        '<option value="">All artists</option>' +
+        `<option value="mine">My subscriptions (${subscribedArtists.size.toLocaleString()})</option>`;
+    }
+
+  } catch(e) {
+    console.error(
+      "Could not load subscriptions",
+      e
+    );
+  }
+}
+
 function escapeHtml(v) {
   return String(v ?? "")
     .replaceAll("&","&amp;")
@@ -358,6 +408,7 @@ function applyFilters() {
   const missing = $("missing").value;
   const type = $("type").value;
   const area = $("area").value;
+  const subscription = $("subscription").value;
   const minMissing = Number($("minMissing").value);
 
   filtered = allRows.filter(r => {
@@ -374,6 +425,14 @@ function applyFilters() {
       return false;
 
     if(area && r.area !== area)
+      return false;
+
+    if(
+      subscription === "mine" &&
+      !subscribedArtists.has(
+        String(r.mbid).toLowerCase()
+      )
+    )
       return false;
 
     if(r.missing_count < minMissing)
@@ -506,7 +565,7 @@ $("next").onclick = () => {
 };
 
 document.querySelectorAll(
-  "#search,#missing,#type,#area,#minMissing"
+  "#search,#missing,#type,#area,#subscription,#minMissing"
 ).forEach(el => {
   el.addEventListener(
     el.tagName === "INPUT" ? "input" : "change",
@@ -534,6 +593,8 @@ document.querySelectorAll("th[data-sort]").forEach(th => {
 });
 
 async function load() {
+
+  loadSavedSubscriptions();
 
   const response = await fetch(
     `data.json?v=${Date.now()}`
