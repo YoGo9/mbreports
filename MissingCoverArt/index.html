@@ -488,6 +488,20 @@ function escapeHtml(v){
     .replaceAll('"',"&quot;");
 }
 
+function formatCountries(countries){
+
+  if(!Array.isArray(countries) || !countries.length)
+    return "Unknown";
+
+  if(countries.includes("[Worldwide]"))
+    return "[Worldwide]";
+
+  if(countries.length <= 2)
+    return countries.join(", ");
+
+  return `${countries[0]}, ${countries[1]} +${countries.length - 2}`;
+}
+
 async function loadYear(){
 
   const year = $("year").value;
@@ -530,8 +544,9 @@ function populateFilters(){
     ).join("");
 
   const countries =
-    [...new Set(allRows.map(r => r.country))]
-    .sort();
+    [...new Set(
+      allRows.flatMap(r => r.countries || [])
+    )].sort();
 
   $("country").innerHTML =
     '<option value="">All countries</option>' +
@@ -596,7 +611,8 @@ function applyFilters(){
     if(format && r.format !== format)
       return false;
 
-    if(country && r.country !== country)
+    if(country &&
+       !(r.countries || []).includes(country))
       return false;
 
     if(service &&
@@ -722,7 +738,7 @@ function render(){
       </td>
 
       <td>
-        ${escapeHtml(r.country)}
+        ${escapeHtml(formatCountries(r.countries))}
       </td>
 
       <td>
@@ -772,7 +788,7 @@ function render(){
         <div class="mobile-meta">
           <span>${escapeHtml(r.type)}</span>
           <span>${escapeHtml(r.format)}</span>
-          <span>${escapeHtml(r.country)}</span>
+          <span>${escapeHtml(formatCountries(r.countries))}</span>
           <span>${escapeHtml(r.date)}</span>
         </div>
 
