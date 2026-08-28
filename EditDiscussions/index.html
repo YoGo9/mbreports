@@ -76,7 +76,10 @@
 <body>
 
 <h1>Most-Commented Edits</h1>
-<p class="sub">MusicBrainz edits ranked by edit-note count.</p>
+<p class="sub">
+MusicBrainz edits ranked by edit-note count.<br>
+<span id="lastUpdated">Data snapshot: loading&hellip;</span>
+</p>
 
 <div class="panel" id="statusPanel">
   <p id="statusText" style="margin:0; color:var(--muted); text-align:center; padding:20px 0;">Loading edits&hellip;</p>
@@ -487,6 +490,36 @@ $("exportCsv").addEventListener("click", () => {
 // picker - it's meant to be hosted with edits.json and editors.json
 // sitting next to it, and just load on its own. ---
 async function tryAutoLoad(){
+  try{
+    const mr = await fetch("meta.json");
+
+    if(mr.ok){
+      const meta = await mr.json();
+
+      if(meta.snapshot_date){
+        const parts = meta.snapshot_date.split("-");
+
+        const d = new Date(
+          Number(parts[0]),
+          Number(parts[1]) - 1,
+          Number(parts[2])
+        );
+
+        $("lastUpdated").textContent =
+          "Data snapshot: " +
+          d.toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+          });
+      }
+    }
+  }
+  catch(e){
+    $("lastUpdated").textContent =
+      "Data snapshot unavailable";
+  }
+
   try{
     const er = await fetch("editors.json");
     if(er.ok) editorNames = await er.json();
