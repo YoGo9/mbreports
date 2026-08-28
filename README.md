@@ -11,6 +11,7 @@ Automatically generated reports from a local replicated MusicBrainz database.
 | [Artists Missing Basic Info](https://yogo9.github.io/mbreports/ArtistsMissingBasicInfo/) | Daily · 2:00 AM ET |
 | [Top Editors](https://yogo9.github.io/mbreports/TopEditors/) | Weekly · Sunday morning |
 | [Edit Discussions](https://yogo9.github.io/mbreports/EditDiscussions/) | Weekly · Sunday morning |
+| [Top Voted Edits](https://yogo9.github.io/mbreports/TopVotedEdits/) | Weekly · Sunday morning |
 
 ## My MusicBrainz Subscriptions
 
