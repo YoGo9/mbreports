@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: weekly-musicbrainz-publisher
@@ -33,10 +34,27 @@ jobs:
       - name: Checkout reports
         uses: actions/checkout@v4
 
+      - name: Skip a snapshot already present on main
+        id: preflight
+        if: github.event_name != 'workflow_dispatch'
+        run: |
+          set -euo pipefail
+          dump=$(curl --fail --silent --show-error --max-time 60 \
+            https://data.metabrainz.org/pub/musicbrainz/data/fullexport/LATEST | tr -d '[:space:]')
+          [[ "$dump" =~ ^[0-9]{8}-[0-9]{6}$ ]] || { echo "::error::Invalid MusicBrainz dump ID"; exit 1; }
+          day="${dump:0:4}-${dump:4:2}-${dump:6:2}"
+          if [[ -f "TopEditors/json/$day.json" ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Snapshot $day already committed; rebuild Pages without reprocessing 16 GB."
+          else
+            echo "Snapshot $day needs processing."
+          fi
+
       - name: Check generated output rules against a synthetic dump
         run: python3 tools/musicbrainz_weekly_selftest.py
 
       - name: Reclaim runner disk space
+        if: steps.preflight.outputs.skip != 'true'
         run: |
           set -euo pipefail
           df -h /
@@ -58,11 +76,13 @@ jobs:
           fi
 
       - name: Install parallel bzip2 decompressor
+        if: steps.preflight.outputs.skip != 'true'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends lbzip2
 
       - name: Generate reports from an official MusicBrainz dump
+        if: steps.preflight.outputs.skip != 'true'
         env:
           PINNED_DUMP: ${{ inputs.dump_id }}
         run: |
@@ -77,6 +97,7 @@ jobs:
             "${args[@]}"
 
       - name: Verify complete output before publishing
+        if: steps.preflight.outputs.skip != 'true'
         run: |
           python3 - "$RUNNER_TEMP/weekly-reports" <<'PY'
           import json
@@ -119,6 +140,7 @@ jobs:
           PY
 
       - name: Save output artifact for troubleshooting
+        if: steps.preflight.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: weekly-musicbrainz-reports
@@ -127,6 +149,7 @@ jobs:
           if-no-files-found: error
 
       - name: Commit only the two weekly reports
+        if: steps.preflight.outputs.skip != 'true'
         env:
           RESULTS: ${{ runner.temp }}/weekly-reports
         run: |
@@ -198,3 +221,17 @@ jobs:
           done
           echo "::error::Unable to publish after three attempts."
           exit 1
+
+      # GITHUB_TOKEN pushes do NOT automatically trigger GitHub Pages builds.
+      # Explicitly request the normal branch-source build after a successful
+      # publish, including when the dump has already been committed.
+      - name: Request GitHub Pages build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error --request POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds"
