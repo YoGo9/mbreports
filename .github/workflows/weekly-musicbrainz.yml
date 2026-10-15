@@ -1,0 +1,200 @@
+name: Weekly MusicBrainz Top Editors and Discussions
+
+# Two dump-based reports only. Daily reports and Top Voted Edits stay on hppro30.
+# The initial workflow-file commit triggers the first live run. All future runs
+# are scheduled Sundays or started manually from the Actions tab.
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/weekly-musicbrainz.yml"
+  schedule:
+    - cron: '0 14 * * 0' # Sunday 10:00 EDT / 09:00 EST
+  workflow_dispatch:
+    inputs:
+      dump_id:
+        description: "Optional full-export ID (YYYYMMDD-HHMMSS); blank = LATEST"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-musicbrainz-publisher
+  cancel-in-progress: false
+
+jobs:
+  weekly:
+    if: github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - name: Checkout reports
+        uses: actions/checkout@v4
+
+      - name: Check generated output rules against a synthetic dump
+        run: python3 tools/musicbrainz_weekly_selftest.py
+
+      - name: Reclaim runner disk space
+        run: |
+          set -euo pipefail
+          df -h /
+          sudo rm -rf \
+            /usr/share/dotnet \
+            /usr/local/lib/android \
+            /opt/ghc \
+            /usr/local/.ghcup \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/local/share/boost \
+            /usr/local/share/powershell \
+            /usr/share/swift
+          sudo docker image prune -af >/dev/null || true
+          df -h /
+          free_kib=$(df -Pk "$RUNNER_TEMP" | awk 'END{print $4}')
+          if (( free_kib < 19 * 1024 * 1024 )); then
+            echo "::error::Not enough space for the MusicBrainz edit dumps."
+            exit 1
+          fi
+
+      - name: Install parallel bzip2 decompressor
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends lbzip2
+
+      - name: Generate reports from an official MusicBrainz dump
+        env:
+          PINNED_DUMP: ${{ inputs.dump_id }}
+        run: |
+          set -euo pipefail
+          args=()
+          if [[ -n "${PINNED_DUMP:-}" ]]; then
+            args+=(--dump-id "$PINNED_DUMP")
+          fi
+          python3 tools/musicbrainz_weekly_actions.py \
+            --download-dir "$RUNNER_TEMP/musicbrainz-dumps" \
+            --output-dir "$RUNNER_TEMP/weekly-reports" \
+            "${args[@]}"
+
+      - name: Verify complete output before publishing
+        run: |
+          python3 - "$RUNNER_TEMP/weekly-reports" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          root = Path(sys.argv[1])
+          meta = json.loads((root / "test-summary.json").read_text())
+          day = meta["snapshot_date"]
+          editors = json.loads((root / "TopEditors" / "json" / f"{day}.json").read_text())
+          discussions = json.loads((root / "EditDiscussions" / "edits.json").read_text())
+          names = json.loads((root / "EditDiscussions" / "editors.json").read_text())
+          assert len(editors) == 500 and len(discussions) == 20000
+          assert meta["top_editor_rows"] == 500 and meta["discussion_rows"] == 20000
+          assert all(r["rank"] == i for i, r in enumerate(editors, 1))
+          assert all(r["rank"] == i for i, r in enumerate(discussions, 1))
+          assert len({r["editor_id"] for r in editors}) == len(editors)
+          assert len({r["edit_id"] for r in discussions}) == len(discussions)
+          assert all(
+              (editors[i - 1]["applied_edit_count"], editors[i - 1]["editor_id"]) >=
+              (editors[i]["applied_edit_count"], editors[i]["editor_id"])
+              for i in range(1, len(editors))
+          )
+          assert all(
+              (discussions[i - 1]["comment_count"], discussions[i - 1]["edit_id"]) >=
+              (discussions[i]["comment_count"], discussions[i]["edit_id"])
+              for i in range(1, len(discussions))
+          )
+          assert all(
+              r["editor_id"] is None or str(r["editor_id"]) in names
+              for r in discussions
+          )
+          assert all(
+              r["still_open"] == (r["edit_status"] == 1)
+              if r["edit_status"] is not None else r["still_open"] is None
+              for r in discussions
+          )
+          print(f"Validated {day}: 500 editor records, 20,000 discussions")
+          print(f"Dump {meta['dump_id']}; scanned {meta['notes_scanned']:,} notes and {meta['edits_scanned']:,} edits")
+          PY
+
+      - name: Save output artifact for troubleshooting
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-musicbrainz-reports
+          path: ${{ runner.temp }}/weekly-reports/
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Commit only the two weekly reports
+        env:
+          RESULTS: ${{ runner.temp }}/weekly-reports
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          # Reports are outside the checkout. Refresh from main before *each*
+          # attempt to preserve any server report update or other concurrent edit.
+          # Rebuild the manifest from the latest main instead of overwriting it
+          # with a copy based on the initial checkout ~45 minutes ago.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            python3 - "$RESULTS" "$RUNNER_TEMP" <<'PY'
+          import json
+          import shutil
+          import sys
+          from pathlib import Path
+
+          src = Path(sys.argv[1])
+          scratch = Path(sys.argv[2])
+          root = Path.cwd()
+          meta = json.loads((src / "test-summary.json").read_text())
+          day = meta["snapshot_date"]
+          manifest_path = root / "TopEditors" / "manifest.json"
+          manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else []
+          # Never publish an older dump on top of a newer existing snapshot.
+          if any(item.get("date", "") > day for item in manifest):
+              (scratch / "weekly-skip-stale").touch()
+              print(f"Skipping {day}: main already contains a newer snapshot.")
+              sys.exit(0)
+
+          new_item = {"date": day, "file": f"json/{day}.json"}
+          manifest = [item for item in manifest if item.get("date") != day]
+          manifest.append(new_item)
+          manifest.sort(key=lambda item: item.get("date", ""), reverse=True)
+
+          target = root / "TopEditors" / "json" / f"{day}.json"
+          target.parent.mkdir(parents=True, exist_ok=True)
+          shutil.copy2(src / "TopEditors" / "json" / f"{day}.json", target)
+          manifest_path.write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+          )
+          for filename in ("edits.json", "editors.json"):
+              shutil.copy2(src / "EditDiscussions" / filename, root / "EditDiscussions" / filename)
+          print(f"Prepared {day} from {meta['dump_id']} on latest main.")
+          PY
+            if [[ -e "$RUNNER_TEMP/weekly-skip-stale" ]]; then
+              exit 0
+            fi
+
+            day=$(python3 -c 'import json,os;print(json.load(open(os.path.join(os.environ["RESULTS"],"test-summary.json")))["snapshot_date"])')
+            git add -- "TopEditors/json/$day.json" \
+              TopEditors/manifest.json \
+              EditDiscussions/edits.json \
+              EditDiscussions/editors.json
+            if git diff --cached --quiet; then
+              echo "Reports unchanged; no commit necessary."
+              exit 0
+            fi
+            git commit -m "weekly MusicBrainz reports $day [skip ci]"
+            if git push origin HEAD:main; then
+              echo "Published Top Editors and Edit Discussions for $day."
+              exit 0
+            fi
+            echo "Concurrent push; retrying from latest main ($attempt/3)"
+            sleep 10
+          done
+          echo "::error::Unable to publish after three attempts."
+          exit 1
