@@ -1,0 +1,88 @@
+name: Test weekly MusicBrainz reports (isolated)
+
+# TEST ONLY. No cron, no git push, no publishing to main or Pages.
+# push is necessary here: workflow_dispatch is not listed by GitHub until a
+# workflow also exists on the default branch, but branch pushes can still run it.
+on:
+  push:
+    branches:
+      - test-weekly-github-actions
+    paths:
+      - ".github/workflows/test-weekly-dumps.yml"
+      - "tools/weekly_actions_test.py"
+      - "tools/weekly_actions_selftest.py"
+  workflow_dispatch:
+    inputs:
+      dump_id:
+        description: "Optional full-export ID (YYYYMMDD-HHMMSS); blank = latest"
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: weekly-dumps-test
+  cancel-in-progress: false
+
+jobs:
+  reports:
+    if: github.ref_name == 'test-weekly-github-actions'
+    name: Generate Top Editors + Edit Discussions test artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - name: Checkout testing branch
+        uses: actions/checkout@v4
+
+      - name: Fast synthetic regression test
+        run: python3 tools/weekly_actions_selftest.py
+
+      - name: Reclaim GitHub runner disk space
+        run: |
+          df -h /
+          sudo rm -rf \
+            /usr/share/dotnet \
+            /usr/local/lib/android \
+            /opt/ghc \
+            /usr/local/.ghcup \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/local/share/boost \
+            /usr/local/share/powershell \
+            /usr/share/swift
+          sudo docker image prune -af >/dev/null || true
+          df -h /
+          # Two tarballs total about 16GB; streaming avoids extracted tables.
+          free_kib=$(df -Pk "$RUNNER_TEMP" | awk 'END{print $4}')
+          if (( free_kib < 19 * 1024 * 1024 )); then
+            echo "::error::Insufficient disk after cleanup for MusicBrainz dumps."
+            exit 1
+          fi
+
+      - name: Install parallel bzip2 decompressor
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends lbzip2
+
+      - name: Generate isolated test artifacts
+        env:
+          PINNED_DUMP: ${{ inputs.dump_id }}
+        run: |
+          set -euo pipefail
+          args=()
+          if [[ -n "${PINNED_DUMP:-}" ]]; then
+            args+=(--dump-id "$PINNED_DUMP")
+          fi
+          python3 tools/weekly_actions_test.py \
+            --download-dir "$RUNNER_TEMP/musicbrainz-dumps" \
+            --output-dir "$RUNNER_TEMP/weekly-test-results" \
+            "${args[@]}"
+
+      - name: Upload result files (no commits)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-reports-test
+          path: ${{ runner.temp }}/weekly-test-results/
+          retention-days: 14
+          if-no-files-found: error
