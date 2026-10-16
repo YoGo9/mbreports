@@ -1,0 +1,104 @@
+name: Test all three weekly MusicBrainz reports
+
+# Isolated full-volume trial; does not commit or publish.
+on:
+  push:
+    branches:
+      - fix-weekly-top-voted
+    paths:
+      - ".github/workflows/test-all-three-weekly.yml"
+      - "tools/musicbrainz_weekly_actions.py"
+      - "tools/musicbrainz_weekly_selftest.py"
+      - "tools/weekly_votes.py"
+  workflow_dispatch:
+    inputs:
+      dump_id:
+        description: "Optional full-export dump ID"
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mb-weekly-three-test
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    if: github.ref_name == 'fix-weekly-top-voted'
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - name: Checkout isolated branch
+        uses: actions/checkout@v4
+      - name: Validate source syntax and all three reports on synthetic data
+        run: |
+          python3 -m py_compile tools/weekly_votes.py tools/musicbrainz_weekly_actions.py tools/musicbrainz_weekly_selftest.py
+          python3 tools/musicbrainz_weekly_selftest.py
+      - name: Clear runner disk space
+        run: |
+          set -euo pipefail
+          df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /usr/local/.ghcup /opt/hostedtoolcache/CodeQL /usr/local/share/boost \
+            /usr/local/share/powershell /usr/share/swift
+          sudo docker image prune -af >/dev/null || true
+          df -h /
+          free_kib=$(df -Pk "$RUNNER_TEMP" | awk 'END{print $4}')
+          if ((free_kib < 19 * 1024 * 1024)); then
+            echo "::error::Not enough free disk for full export"
+            exit 1
+          fi
+      - name: Install parallel decompression
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends lbzip2
+      - name: Process one complete MusicBrainz snapshot
+        env:
+          PINNED_DUMP: ${{ inputs.dump_id }}
+          TMPDIR: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          args=()
+          if [[ -n "${PINNED_DUMP:-}" ]]; then
+            args+=(--dump-id "$PINNED_DUMP")
+          fi
+          python3 tools/musicbrainz_weekly_actions.py \
+            --download-dir "$RUNNER_TEMP/musicbrainz-dumps" \
+            --output-dir "$RUNNER_TEMP/all-three-test" \
+            "${args[@]}"
+      - name: Check generated results
+        run: |
+          python3 - "$RUNNER_TEMP/all-three-test" <<'PY'
+          import json, sys
+          from pathlib import Path
+          p=Path(sys.argv[1])
+          m=json.loads((p/'test-summary.json').read_text())
+          assert m['top_editor_rows'] == 500
+          assert m['discussion_rows'] == 20000
+          assert m['top_voted_rows'] >= 20000
+          d=m['snapshot_date']
+          assert json.loads((p/'TopVotedEdits/meta.json').read_text())['snapshot_date'] == d
+          assert json.loads((p/'EditDiscussions/meta.json').read_text())['snapshot_date'] == d
+          voted=json.loads((p/'TopVotedEdits/votes.json').read_text())
+          keys=('total_votes','yes_votes','no_votes','abstain_votes','approve_votes','admin_approve_votes','admin_reject_votes')
+          assert all(all(k in v for k in keys) for v in voted)
+          assert all(v['rank']==i for i,v in enumerate(voted,1))
+          assert all(
+            (voted[i-1]['total_votes'],voted[i-1]['yes_votes'],voted[i-1]['no_votes'],voted[i-1]['edit_id']) >=
+            (voted[i]['total_votes'],voted[i]['yes_votes'],voted[i]['no_votes'],voted[i]['edit_id'])
+            for i in range(1,len(voted))
+          )
+          names=json.loads((p/'TopVotedEdits/editors.json').read_text())
+          assert all(v['editor_id'] is None or str(v['editor_id']) in names for v in voted)
+          print('Validated three reports against full snapshot',d,
+                'voted',len(voted),'current votes',m['current_votes'])
+          PY
+      - name: Upload artifacts (no Git pushes)
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-three-weekly-reports-test
+          path: ${{ runner.temp }}/all-three-test/
+          retention-days: 14
+          if-no-files-found: error

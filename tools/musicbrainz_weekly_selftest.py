@@ -38,11 +38,26 @@ def main() -> None:
             "6\t8\t102\tSingle\t2026-10-04\n"
             "7\t8\t999\tDeleted edit\t2026-10-04\n"
         )
+        votes = (
+            "1\t7\t100\t1\t2026-10-05\tf\n"
+            "2\t7\t100\t0\t2026-10-05\tf\n"
+            "3\t7\t100\t-1\t2026-10-05\tf\n"
+            "4\t7\t100\t2\t2026-10-05\tf\n"
+            "5\t7\t100\t3\t2026-10-05\tf\n"
+            "6\t7\t100\t4\t2026-10-05\tf\n"
+            "7\t7\t100\t1\t2026-10-05\tt\n"
+            "8\t8\t101\t0\t2026-10-05\tf\n"
+            "9\t8\t101\t0\t2026-10-05\tf\n"
+            "10\t8\t102\t2\t2026-10-05\tf\n"
+            "11\t8\t999\t1\t2026-10-05\tf\n"
+            "12\t8\t8000\t0\t2026-10-05\tf\n"
+            "13\t8\t8000\t0\t2026-10-05\tf\n"
+        )
         make_tar(edit_tar, [
             ("mbdump/edit", edits),
             ("mbdump/edit_data", "enormous JSON is not needed\n"),
             ("mbdump/edit_note", notes),
-            ("mbdump/vote", "not needed\n"),
+            ("mbdump/vote", votes),
         ])
         make_tar(editor_tar, [("mbdump/editor_sanitized", "7\tEditor Seven\n8\tEditor Eight\n")])
         out = root / "out"
@@ -51,7 +66,7 @@ def main() -> None:
                         "--edit-dump", str(edit_tar),
                         "--editor-dump", str(editor_tar),
                         "--output-dir", str(out),
-                        "--discussions-top", "3"], check=True)
+                        "--discussions-top", "3", "--votes-top", "2"], check=True)
         top = json.loads((out / "TopEditors" / "json" / "2026-10-14.json").read_text())
         assert [(r["editor_id"], r["applied_edit_count"]) for r in top] == [(8, 1), (7, 1)]
         assert top[0]["editor_name"] == "Editor Eight"
@@ -66,10 +81,32 @@ def main() -> None:
         manifest = json.loads((out / "TopEditors" / "manifest.json").read_text())
         assert manifest[0] == {"date": "2026-10-14", "file": "json/2026-10-14.json"}
         summary = json.loads((out / "test-summary.json").read_text())
+        voted = json.loads((out / "TopVotedEdits" / "votes.json").read_text())
+        assert [(r["edit_id"], r["total_votes"]) for r in voted] == [
+            (100, 6), (8000, 2), (101, 2), (999, 1), (102, 1)
+        ]
+        assert voted[0]["yes_votes"] == 1 and voted[0]["no_votes"] == 1
+        assert voted[0]["abstain_votes"] == 1 and voted[0]["approve_votes"] == 1
+        assert voted[0]["admin_approve_votes"] == 1 and voted[0]["admin_reject_votes"] == 1
+        assert voted[1]["editor_id"] is None  # missing edit row
+        assert voted[2]["still_open"] is True
+        assert voted[4]["editor_id"] == 8
+        vote_names = json.loads((out / "TopVotedEdits" / "editors.json").read_text())
+        assert vote_names == {"7": "Editor Seven", "8": "Editor Eight"}
+        assert json.loads((out / "TopVotedEdits" / "meta.json").read_text()) == {
+            "snapshot_date": "2026-10-14"
+        }
+        assert json.loads((out / "EditDiscussions" / "meta.json").read_text()) == {
+            "snapshot_date": "2026-10-14"
+        }
+        assert summary["votes_scanned"] == 13
+        assert summary["current_votes"] == 12
+        assert summary["superseded_votes"] == 1
+        assert summary["top_voted_rows"] == 5
         assert summary["notes_scanned"] == 7
         assert summary["edits_scanned"] == 3
         assert summary["publishing"].startswith("caller controlled")
-        print("SELF-TEST PASSED: counts, ordering, statuses, missing edit, names and output structure")
+        print("SELF-TEST PASSED: all 3 reports, seven vote metrics, superseded votes, tie-breaks and metadata")
 
 
 if __name__ == "__main__":
