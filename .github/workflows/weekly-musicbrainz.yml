@@ -1,6 +1,6 @@
-name: Weekly MusicBrainz Top Editors and Discussions
+name: Weekly MusicBrainz Reports (all three)
 
-# Two dump-based reports only. Daily reports and Top Voted Edits stay on hppro30.
+# Three dump-based weekly reports; daily replicated-database reports stay on hppro30.
 # The initial workflow-file commit triggers the first live run. All future runs
 # are scheduled Sundays or started manually from the Actions tab.
 on:
@@ -43,7 +43,9 @@ jobs:
             https://data.metabrainz.org/pub/musicbrainz/data/fullexport/LATEST | tr -d '[:space:]')
           [[ "$dump" =~ ^[0-9]{8}-[0-9]{6}$ ]] || { echo "::error::Invalid MusicBrainz dump ID"; exit 1; }
           day="${dump:0:4}-${dump:4:2}-${dump:6:2}"
-          if [[ -f "TopEditors/json/$day.json" ]]; then
+          votes_date=$(python3 -c 'import json; print(json.load(open("TopVotedEdits/meta.json")).get("snapshot_date",""))' 2>/dev/null || true)
+          discussions_date=$(python3 -c 'import json; print(json.load(open("EditDiscussions/meta.json")).get("snapshot_date",""))' 2>/dev/null || true)
+          if [[ -f "TopEditors/json/$day.json" && "$votes_date" == "$day" && "$discussions_date" == "$day" ]]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "Snapshot $day already committed; rebuild Pages without reprocessing 16 GB."
           else
@@ -110,6 +112,22 @@ jobs:
           editors = json.loads((root / "TopEditors" / "json" / f"{day}.json").read_text())
           discussions = json.loads((root / "EditDiscussions" / "edits.json").read_text())
           names = json.loads((root / "EditDiscussions" / "editors.json").read_text())
+          voted = json.loads((root / "TopVotedEdits" / "votes.json").read_text())
+          voted_names = json.loads((root / "TopVotedEdits" / "editors.json").read_text())
+          assert json.loads((root / "EditDiscussions" / "meta.json").read_text())["snapshot_date"] == day
+          assert json.loads((root / "TopVotedEdits" / "meta.json").read_text())["snapshot_date"] == day
+          assert meta["top_voted_rows"] == len(voted) and len(voted) >= 20000
+          assert meta["current_votes"] > 0
+          assert all(r["rank"] == i for i,r in enumerate(voted, 1))
+          vote_metrics = ("total_votes", "yes_votes", "no_votes", "abstain_votes",
+                          "approve_votes", "admin_approve_votes", "admin_reject_votes")
+          assert all(all(metric in row for metric in vote_metrics) for row in voted)
+          assert all(
+              (voted[i-1]["total_votes"], voted[i-1]["yes_votes"], voted[i-1]["no_votes"], voted[i-1]["edit_id"]) >=
+              (voted[i]["total_votes"], voted[i]["yes_votes"], voted[i]["no_votes"], voted[i]["edit_id"])
+              for i in range(1,len(voted))
+          )
+          assert all(r["editor_id"] is None or str(r["editor_id"]) in voted_names for r in voted)
           assert len(editors) == 500 and len(discussions) == 20000
           assert meta["top_editor_rows"] == 500 and meta["discussion_rows"] == 20000
           assert all(r["rank"] == i for i, r in enumerate(editors, 1))
@@ -135,7 +153,7 @@ jobs:
               if r["edit_status"] is not None else r["still_open"] is None
               for r in discussions
           )
-          print(f"Validated {day}: 500 editor records, 20,000 discussions")
+          print(f"Validated {day}: 500 editors, 20,000 discussions, {len(voted):,} voted edits")
           print(f"Dump {meta['dump_id']}; scanned {meta['notes_scanned']:,} notes and {meta['edits_scanned']:,} edits")
           PY
 
@@ -148,7 +166,7 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-      - name: Commit only the two weekly reports
+      - name: Commit all three weekly reports
         if: steps.preflight.outputs.skip != 'true'
         env:
           RESULTS: ${{ runner.temp }}/weekly-reports
@@ -194,8 +212,10 @@ jobs:
           manifest_path.write_text(
               json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
           )
-          for filename in ("edits.json", "editors.json"):
+          for filename in ("edits.json", "editors.json", "meta.json"):
               shutil.copy2(src / "EditDiscussions" / filename, root / "EditDiscussions" / filename)
+          for filename in ("votes.json", "editors.json", "meta.json"):
+              shutil.copy2(src / "TopVotedEdits" / filename, root / "TopVotedEdits" / filename)
           print(f"Prepared {day} from {meta['dump_id']} on latest main.")
           PY
             if [[ -e "$RUNNER_TEMP/weekly-skip-stale" ]]; then
@@ -206,14 +226,18 @@ jobs:
             git add -- "TopEditors/json/$day.json" \
               TopEditors/manifest.json \
               EditDiscussions/edits.json \
-              EditDiscussions/editors.json
+              EditDiscussions/editors.json \
+              EditDiscussions/meta.json \
+              TopVotedEdits/votes.json \
+              TopVotedEdits/editors.json \
+              TopVotedEdits/meta.json
             if git diff --cached --quiet; then
               echo "Reports unchanged; no commit necessary."
               exit 0
             fi
             git commit -m "weekly MusicBrainz reports $day [skip ci]"
             if git push origin HEAD:main; then
-              echo "Published Top Editors and Edit Discussions for $day."
+              echo "Published Top Editors, Edit Discussions and Top Voted Edits for $day."
               exit 0
             fi
             echo "Concurrent push; retrying from latest main ($attempt/3)"
