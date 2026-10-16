@@ -1,6 +1,6 @@
 # MusicBrainz Reports
 
-Automatically generated reports from MusicBrainz data. Daily reports use a locally replicated database; Top Editors and Edit Discussions use the official database exports processed with GitHub Actions.
+Automatically generated reports from MusicBrainz data. Daily reports use a locally replicated database; Top Editors, Edit Discussions and Top Voted Edits use the official database exports processed with GitHub Actions.
 
 | Report | Schedule |
 |---|---|
@@ -37,6 +37,6 @@ He has many more useful MusicBrainz reports as well, so definitely check out his
 
 ---
 
-Report data is generated automatically and published to GitHub Pages. Daily reports use the local MusicBrainz mirror; Top Editors and Edit Discussions are built from official exports with GitHub Actions.
+Report data is generated automatically and published to GitHub Pages. Daily reports use the local MusicBrainz mirror; Top Editors, Edit Discussions and Top Voted Edits are built from official exports with GitHub Actions.
 
 <sub>Thanks to [majkinetor](https://github.com/majkinetor) for the [GitHub Actions processing idea](https://github.com/majkinetor/musicbrainz-userscripts/tree/main/dev/script-metrics).</sub>
