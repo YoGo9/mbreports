@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 from array import array
 from collections import defaultdict
+from weekly_votes import top_vote_counts, build_voted_rows
 from datetime import datetime, timezone
 import hashlib
 import heapq
@@ -263,16 +264,21 @@ def write_json(path: Path, obj) -> None:
 
 
 def generate(edit_dump: Path, editor_dump: Path, dump_id: str, out: Path, repo_root: Path,
-             discussions_top: int = TOP_DISCUSSIONS):
+             discussions_top: int = TOP_DISCUSSIONS, votes_top: int = 20_000):
     date = f"{dump_id[:4]}-{dump_id[4:6]}-{dump_id[6:8]}"
     start = time.monotonic()
     top_notes, total_notes = note_top_counts(edit_dump, discussions_top)
-    counts, edit_details, total_edits = scan_edits(edit_dump, {edit for _, edit in top_notes})
+    voted_ids, vote_counts, vote_stats = top_vote_counts(
+        edit_dump, iter_member_lines, top_n=votes_top
+    )
+    selected_ids = {edit for _, edit in top_notes} | set(voted_ids)
+    counts, edit_details, total_edits = scan_edits(edit_dump, selected_ids)
     top_editors = heapq.nlargest(TOP_EDITORS, counts.items(), key=lambda item: (item[1], item[0]))
     needed_names = {eid for eid, _ in top_editors}
     needed_names.update(record["editor_id"] for record in edit_details.values()
                         if record.get("editor_id") is not None)
     names = lookup_editors(editor_dump, needed_names)
+    voted_rows = build_voted_rows(voted_ids, vote_counts, edit_details)
 
     top_rows = [
         {"rank": rank, "editor_id": editor_id,
@@ -307,11 +313,21 @@ def generate(edit_dump: Path, editor_dump: Path, dump_id: str, out: Path, repo_r
             if record.get("editor_id") in names
         })
     })
+    write_json(out / "EditDiscussions" / "meta.json", {"snapshot_date": date})
+    write_json(out / "TopVotedEdits" / "votes.json", voted_rows)
+    write_json(out / "TopVotedEdits" / "editors.json", {
+        str(editor_id): names[editor_id] for editor_id in sorted({
+            record["editor_id"] for record in voted_rows
+            if record.get("editor_id") in names
+        })
+    })
+    write_json(out / "TopVotedEdits" / "meta.json", {"snapshot_date": date})
     meta = {
         "dump_id": dump_id, "snapshot_date": date,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "notes_scanned": total_notes, "edits_scanned": total_edits,
         "top_editor_rows": len(top_rows), "discussion_rows": len(discussions),
+        "top_voted_rows": len(voted_rows), **vote_stats,
         "seconds": round(time.monotonic() - start, 2),
         "publishing": "caller controlled; generator performs no Git writes",
     }
@@ -327,11 +343,12 @@ def main():
     p.add_argument("--output-dir", type=Path, default=Path("weekly-reports-output"))
     p.add_argument("--download-dir", type=Path, default=Path("/tmp/mb-weekly-dumps"))
     p.add_argument("--discussions-top", type=int, default=TOP_DISCUSSIONS)
+    p.add_argument("--votes-top", type=int, default=20_000)
     args = p.parse_args()
     if bool(args.edit_dump) != bool(args.editor_dump):
         p.error("Must supply both --edit-dump and --editor-dump, or neither")
-    if args.discussions_top < 1:
-        p.error("--discussions-top must be positive")
+    if args.discussions_top < 1 or args.votes_top < 1:
+        p.error("--discussions-top and --votes-top must be positive")
 
     dump_id = args.dump_id or latest_dump()
     if not DUMP_PATTERN.fullmatch(dump_id):
@@ -344,7 +361,7 @@ def main():
         editor_dump = download_verified(dump_id, EDITOR_NAME, args.download_dir, checksums[EDITOR_NAME])
 
     root = Path(__file__).resolve().parents[1]
-    generate(edit_dump, editor_dump, dump_id, args.output_dir, root, args.discussions_top)
+    generate(edit_dump, editor_dump, dump_id, args.output_dir, root, args.discussions_top, args.votes_top)
 
 
 if __name__ == "__main__":
