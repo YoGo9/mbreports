@@ -79,7 +79,13 @@ def main() -> None:
         names = json.loads((out / "EditDiscussions" / "editors.json").read_text())
         assert names == {"7": "Editor Seven", "8": "Editor Eight"}
         manifest = json.loads((out / "TopEditors" / "manifest.json").read_text())
-        assert manifest[0] == {"date": "2026-10-14", "file": "json/2026-10-14.json"}
+        expected_snapshot = {"date": "2026-10-14", "file": "json/2026-10-14.json"}
+        # The repository can contain newer real snapshots; the synthetic
+        # snapshot is valid even when it is not the first manifest entry.
+        assert manifest.count(expected_snapshot) == 1
+        dates = [entry["date"] for entry in manifest]
+        assert dates == sorted(dates, reverse=True)
+        assert len(dates) == len(set(dates))
         summary = json.loads((out / "test-summary.json").read_text())
         voted = json.loads((out / "TopVotedEdits" / "votes.json").read_text())
         assert [(r["edit_id"], r["total_votes"]) for r in voted] == [
