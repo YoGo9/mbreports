@@ -8,6 +8,9 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/weekly-musicbrainz.yml"
+      - "tools/musicbrainz_weekly_actions.py"
+      - "tools/musicbrainz_weekly_selftest.py"
+      - "tools/weekly_votes.py"
   schedule:
     - cron: '0 14 * * 0' # Sunday 10:00 EDT / 09:00 EST
   workflow_dispatch:
