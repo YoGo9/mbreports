@@ -49,9 +49,10 @@ jobs:
           day="${dump:0:4}-${dump:4:2}-${dump:6:2}"
           votes_date=$(python3 -c 'import json; print(json.load(open("TopVotedEdits/meta.json")).get("snapshot_date",""))' 2>/dev/null || true)
           discussions_date=$(python3 -c 'import json; print(json.load(open("EditDiscussions/meta.json")).get("snapshot_date",""))' 2>/dev/null || true)
-          if [[ -f "TopEditors/json/$day.json" && "$votes_date" == "$day" && "$discussions_date" == "$day" ]]; then
+          contributions_date=$(python3 -c 'import json; print(json.load(open("TopEditors/contributions.json")).get("snapshot_date",""))' 2>/dev/null || true)
+          if [[ -f "TopEditors/json/$day.json" && "$votes_date" == "$day" && "$discussions_date" == "$day" && "$contributions_date" == "$day" ]]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "Snapshot $day already committed; rebuild Pages without reprocessing 16 GB."
+            echo "Snapshot $day including contributions already committed; no reprocessing."
           else
             echo "Snapshot $day needs processing."
           fi
@@ -118,6 +119,17 @@ jobs:
           names = json.loads((root / "EditDiscussions" / "editors.json").read_text())
           voted = json.loads((root / "TopVotedEdits" / "votes.json").read_text())
           voted_names = json.loads((root / "TopVotedEdits" / "editors.json").read_text())
+          contributions = json.loads((root / "TopEditors" / "contributions.json").read_text())
+          assert contributions["snapshot_date"] == day
+          assert set(contributions["editors"]) == {str(r["editor_id"]) for r in editors}
+          keys = ("release_groups_added", "releases_added", "artists_added", "works_added")
+          assert all(
+              set(counts) == set(keys) and all(type(counts[key]) is int and counts[key] >= 0 for key in keys)
+              for counts in contributions["editors"].values()
+          )
+          assert all(sum(contributions["editors"][str(row["editor_id"])].values()) <= row["applied_edit_count"]
+                     for row in editors)
+          assert meta["contribution_editors"] == 500
           assert json.loads((root / "EditDiscussions" / "meta.json").read_text())["snapshot_date"] == day
           assert json.loads((root / "TopVotedEdits" / "meta.json").read_text())["snapshot_date"] == day
           assert meta["top_voted_rows"] == len(voted) and len(voted) >= 20000
@@ -214,6 +226,8 @@ jobs:
           target = root / "TopEditors" / "json" / f"{day}.json"
           target.parent.mkdir(parents=True, exist_ok=True)
           shutil.copy2(src / "TopEditors" / "json" / f"{day}.json", target)
+          shutil.copy2(src / "TopEditors" / "contributions.json",
+                       root / "TopEditors" / "contributions.json")
           manifest_path.write_text(
               json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
           )
@@ -230,6 +244,7 @@ jobs:
             day=$(python3 -c 'import json,os;print(json.load(open(os.path.join(os.environ["RESULTS"],"test-summary.json")))["snapshot_date"])')
             git add -- "TopEditors/json/$day.json" \
               TopEditors/manifest.json \
+              TopEditors/contributions.json \
               EditDiscussions/edits.json \
               EditDiscussions/editors.json \
               EditDiscussions/meta.json \
