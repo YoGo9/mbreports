@@ -23,6 +23,7 @@ on:
 permissions:
   contents: write
   pages: write
+  actions: read
 
 concurrency:
   group: weekly-musicbrainz-publisher
@@ -170,6 +171,7 @@ jobs:
           if-no-files-found: error
 
       - name: Commit all three weekly reports
+        id: publish
         if: steps.preflight.outputs.skip != 'true'
         env:
           RESULTS: ${{ runner.temp }}/weekly-reports
@@ -240,6 +242,7 @@ jobs:
             fi
             git commit -m "weekly MusicBrainz reports $day [skip ci]"
             if git push origin HEAD:main; then
+              echo "published_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
               echo "Published Top Editors, Edit Discussions and Top Voted Edits for $day."
               exit 0
             fi
@@ -249,14 +252,42 @@ jobs:
           echo "::error::Unable to publish after three attempts."
           exit 1
 
-      # GITHUB_TOKEN pushes do NOT automatically trigger GitHub Pages builds.
-      # Explicitly request the normal branch-source build after a successful
-      # publish, including when the dump has already been committed.
-      - name: Request GitHub Pages build
+      # Avoid duplicate Pages requests. Some Pages configurations queue a
+      # build automatically after the Actions commit; others need the API.
+      # Wait for the automatic build to appear, then request one if needed.
+      # Do nothing when this workflow did not publish a new report commit.
+      - name: Ensure Pages deployment for new report commit
+        if: steps.publish.outputs.published_sha != ''
         env:
           GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ steps.publish.outputs.published_sha }}
         run: |
           set -euo pipefail
+          echo "Checking Pages deployment for $TARGET_SHA"
+          sleep 45
+          response=$(curl --fail-with-body --silent --show-error \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs?per_page=50")
+          if python3 -c '
+          import json, os, sys
+          payload = json.load(sys.stdin)
+          target = os.environ["TARGET_SHA"]
+          present = any(
+              run.get("name") == "pages build and deployment"
+              and run.get("head_sha") == target
+              and run.get("conclusion") not in (
+                  "cancelled", "failure", "timed_out", "skipped"
+              )
+              for run in payload.get("workflow_runs", [])
+          )
+          sys.exit(0 if present else 1)
+          ' <<<"$response"; then
+            echo "Pages deployment already queued or completed; skipping extra request."
+            exit 0
+          fi
+          echo "No Pages deployment found; requesting a build for the new reports."
           curl --fail-with-body --silent --show-error --request POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GH_TOKEN" \
