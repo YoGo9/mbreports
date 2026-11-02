@@ -28,6 +28,14 @@ def main() -> None:
             "100\t7\t10\t2\tf\t2026-10-01 00:00:00+00\t2026-10-02 00:00:00+00\t\\N\t0\t\\N\n"
             "101\t8\t20\t1\tf\t2026-10-03 00:00:00+00\t\\N\t\\N\t0\t\\N\n"
             "102\t8\t30\t2\tf\t2026-10-04 00:00:00+00\t2026-10-05 00:00:00+00\t\\N\t0\t\\N\n"
+            "103\t7\t20\t2\tf\t2026-10-05 00:00:00+00\t2026-10-06 00:00:00+00\t\\N\t0\t\\N\n"
+            "104\t7\t31\t2\tf\t2026-10-05 00:00:00+00\t2026-10-06 00:00:00+00\t\\N\t0\t\\N\n"
+            "105\t7\t216\t2\tf\t2026-10-05 00:00:00+00\t2026-10-06 00:00:00+00\t\\N\t0\t\\N\n"
+            "106\t8\t1\t2\tf\t2026-10-05 00:00:00+00\t2026-10-06 00:00:00+00\t\\N\t0\t\\N\n"
+            "107\t8\t41\t2\tf\t2026-10-05 00:00:00+00\t2026-10-06 00:00:00+00\t\\N\t0\t\\N\n"
+            "108\t8\t20\t3\tf\t2026-10-05 00:00:00+00\t2026-10-06 00:00:00+00\t\\N\t0\t\\N\n"
+            "109\t7\t41\t2\tf\t2026-10-05 00:00:00+00\t2026-10-06 00:00:00+00\t\\N\t0\t\\N\n"
+            "110\t7\t1\t1\tf\t2026-10-05 00:00:00+00\t2026-10-06 00:00:00+00\t\\N\t0\t\\N\n"
         )
         notes = (
             "1\t7\t100\tHello\t2026-10-01\n"
@@ -68,8 +76,8 @@ def main() -> None:
                         "--output-dir", str(out),
                         "--discussions-top", "3", "--votes-top", "2"], check=True)
         top = json.loads((out / "TopEditors" / "json" / "2026-10-14.json").read_text())
-        assert [(r["editor_id"], r["applied_edit_count"]) for r in top] == [(8, 1), (7, 1)]
-        assert top[0]["editor_name"] == "Editor Eight"
+        assert [(r["editor_id"], r["applied_edit_count"]) for r in top] == [(7, 5), (8, 3)]
+        assert top[0]["editor_name"] == "Editor Seven"
         notes_out = json.loads((out / "EditDiscussions" / "edits.json").read_text())
         assert [(r["edit_id"], r["comment_count"]) for r in notes_out] == [(101, 3), (100, 2), (999, 1)]
         assert notes_out[0]["still_open"] is True
@@ -86,6 +94,18 @@ def main() -> None:
         dates = [entry["date"] for entry in manifest]
         assert dates == sorted(dates, reverse=True)
         assert len(dates) == len(set(dates))
+        contributions = json.loads((out / "TopEditors" / "contributions.json").read_text())
+        assert contributions["snapshot_date"] == "2026-10-14"
+        assert contributions["editors"] == {
+            "7": {
+                "release_groups_added": 1, "releases_added": 2,
+                "artists_added": 0, "works_added": 1,
+            },
+            "8": {
+                "release_groups_added": 0, "releases_added": 0,
+                "artists_added": 1, "works_added": 1,
+            },
+        }
         summary = json.loads((out / "test-summary.json").read_text())
         voted = json.loads((out / "TopVotedEdits" / "votes.json").read_text())
         assert [(r["edit_id"], r["total_votes"]) for r in voted] == [
@@ -110,9 +130,10 @@ def main() -> None:
         assert summary["superseded_votes"] == 1
         assert summary["top_voted_rows"] == 5
         assert summary["notes_scanned"] == 7
-        assert summary["edits_scanned"] == 3
+        assert summary["edits_scanned"] == 11
+        assert summary["contribution_editors"] == 2
         assert summary["publishing"].startswith("caller controlled")
-        print("SELF-TEST PASSED: all 3 reports, seven vote metrics, superseded votes, tie-breaks and metadata")
+        print("SELF-TEST PASSED: all 3 reports, latest creation contributions, seven vote metrics, superseded votes and metadata")
 
 
 if __name__ == "__main__":

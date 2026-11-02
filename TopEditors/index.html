@@ -262,7 +262,9 @@
 
     .col-rank { font-family: var(--mono); font-size: 12px; color: var(--fg2); width: 54px; }
     .col-name { font-weight: 600; }
-    .col-edits, .col-delta { font-family: var(--mono); font-size: 12px; text-align: right; }
+    .col-edits, .col-delta, .col-creation { font-family: var(--mono); font-size: 12px; text-align: right; }
+    #main-table { min-width: 1080px; }
+    .col-creation { white-space: nowrap; }
 
     .link { color: var(--accent2); text-decoration: none; }
     .link:hover { text-decoration: underline; }
@@ -510,12 +512,16 @@
               <th class="sortable" data-col="rank">#</th>
               <th>Editor</th>
               <th class="col-edits sortable" data-col="edits">Edits</th>
+              <th class="col-creation sortable" data-col="release_groups_added" title="Applied Add Release Group edits; latest data only">Release Groups</th>
+              <th class="col-creation sortable" data-col="releases_added" title="Applied Add Release edits, including historic releases; latest data only">Releases</th>
+              <th class="col-creation sortable" data-col="artists_added" title="Applied Add Artist edits; latest data only">Artists</th>
+              <th class="col-creation sortable" data-col="works_added" title="Applied Add Work edits; latest data only">Works</th>
               <th class="col-delta sortable" data-col="rank_change">Δ Rank</th>
               <th class="col-delta sortable" data-col="edits_change">Δ Edits</th>
             </tr>
           </thead>
           <tbody id="tbody">
-            <tr class="status-row"><td colspan="5">Loading…</td></tr>
+            <tr class="status-row"><td colspan="9">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -613,12 +619,14 @@
 
 <script>
 const MANIFEST_URL = 'manifest.json';
+const CONTRIBUTIONS_URL = 'contributions.json';
 const MB_URL = n => `https://musicbrainz.org/user/${encodeURIComponent(n)}`;
 const fmt    = n => Number.isFinite(+n) ? (+n).toLocaleString() : String(n ?? '');
 const fmtD   = n => (n == null || n === '') ? '' : (n > 0 ? '+' : '') + fmt(n);
 
 let snapshots   = [];
 let cache       = {};
+let latestContributions = null; // Always current, independent of selected snapshots
 let currItems   = [];
 let droppedItems = [];
 let sortState   = { col: 'rank', dir: 1 };
@@ -644,6 +652,12 @@ function normalize(data) {
     name:      r.editor_name ?? '',
     edits:     r.applied_edit_count ?? 0,
     rank:      r.rank ?? (i + 1),
+    // The four creation counts are NOT historical. The same latest-only
+    // values are shown regardless of which snapshots are compared.
+    release_groups_added: latestContributions?.editors?.[String(r.editor_id)]?.release_groups_added ?? null,
+    releases_added:       latestContributions?.editors?.[String(r.editor_id)]?.releases_added ?? null,
+    artists_added:        latestContributions?.editors?.[String(r.editor_id)]?.artists_added ?? null,
+    works_added:          latestContributions?.editors?.[String(r.editor_id)]?.works_added ?? null,
   })).filter(x => x.name);
 }
 
@@ -674,7 +688,7 @@ function renderTable() {
   });
 
   if (!rows.length) {
-    tbody.innerHTML = `<tr class="status-row"><td colspan="5">No results.</td></tr>`;
+    tbody.innerHTML = `<tr class="status-row"><td colspan="9">No results.</td></tr>`;
     return;
   }
 
@@ -695,6 +709,10 @@ function renderTable() {
       <td class="col-rank">${x.rank}</td>
       <td class="col-name"><a class="link" href="${MB_URL(x.name)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${x.name}</a></td>
       <td class="col-edits">${fmt(x.edits)}</td>
+      <td class="col-creation">${x.release_groups_added == null ? '—' : fmt(x.release_groups_added)}</td>
+      <td class="col-creation">${x.releases_added == null ? '—' : fmt(x.releases_added)}</td>
+      <td class="col-creation">${x.artists_added == null ? '—' : fmt(x.artists_added)}</td>
+      <td class="col-creation">${x.works_added == null ? '—' : fmt(x.works_added)}</td>
       <td class="col-delta">${rankCell}</td>
       <td class="col-delta">${editsCell}</td>
     </tr>`;
@@ -794,6 +812,15 @@ async function openModal(editorId, editorName) {
   document.getElementById('modal-stats').innerHTML = [
     { val: latest ? '#' + latest.rank : '—', lbl: 'Current rank' },
     { val: latest ? fmt(latest.edits) : '—', lbl: 'Total edits' },
+    ...[
+      ['release_groups_added', 'Release groups added'],
+      ['releases_added', 'Releases added'],
+      ['artists_added', 'Artists added'],
+      ['works_added', 'Works added'],
+    ].map(([key, lbl]) => {
+      const value = latestContributions?.editors?.[String(editorId)]?.[key];
+      return { val: value == null ? '—' : fmt(value), lbl };
+    }),
     { val: history.length, lbl: 'Snapshots' },
     gained != null ? { val: '+' + fmt(gained), lbl: 'Edits gained' } : null,
   ].filter(Boolean).map(s =>
@@ -862,7 +889,7 @@ async function loadAndRender() {
 
   const newCount = annotated.filter(x=>x.isNew).length;
   document.getElementById('subtitle').textContent =
-    `${newEntry.date}  vs  ${oldEntry.date} · ${newCount} new · ${dropped.length} dropped`;
+    `${newEntry.date}  vs  ${oldEntry.date} · ${newCount} new · ${dropped.length} dropped · added entities: ${latestContributions?.snapshot_date ?? "pending"}`;
 
   renderTable();
   renderDropped();
@@ -874,6 +901,12 @@ async function loadAndRender() {
   try {
     const manifest = await fetchJSON(MANIFEST_URL);
     snapshots = [...manifest].sort((a,b) => b.date.localeCompare(a.date));
+    try {
+      latestContributions = await fetchJSON(CONTRIBUTIONS_URL);
+    } catch (error) {
+      // Prior to the first new weekly processing, the optional file will not exist.
+      console.info('Latest contribution totals unavailable:', error);
+    }
     if (!snapshots.length) throw new Error('manifest.json is empty');
 
     const selNew = document.getElementById('sel-new');
@@ -902,7 +935,7 @@ async function loadAndRender() {
 
   } catch(err) {
     document.getElementById('tbody').innerHTML =
-      `<tr class="err-row"><td colspan="5">${String(err)}</td></tr>`;
+      `<tr class="err-row"><td colspan="9">${String(err)}</td></tr>`;
     document.getElementById('subtitle').textContent = 'Error loading data';
   }
 })();

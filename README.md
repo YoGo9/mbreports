@@ -13,6 +13,13 @@ Automatically generated reports from MusicBrainz data. Daily reports use a local
 | [Edit Discussions](https://yogo9.github.io/mbreports/EditDiscussions/) | Weekly · Sunday morning |
 | [Top Voted Edits](https://yogo9.github.io/mbreports/TopVotedEdits/) | Weekly · Sunday morning |
 
+The [Top Editors](https://yogo9.github.io/mbreports/TopEditors/) leaderboard also shows
+latest-only totals for applied **Release Group**, **Release**, **Artist** and **Work**
+creation edits for its current top 500 editors. These counts live in
+`TopEditors/contributions.json`, are refreshed each weekly run, and are not
+part of the historical rank/edit-count comparisons. Historic release-creation
+edits are included.
+
 ## My MusicBrainz Subscriptions
 
 Install the [Artist Subscription Sync userscript](https://yogo9.github.io/mbreports/SubscriptionSync.user.js) to sync your MusicBrainz artist subscriptions for use in supported reports.
