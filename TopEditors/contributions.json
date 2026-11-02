@@ -1,0 +1,3005 @@
+{
+  "snapshot_date": "2026-11-01",
+  "editors": {
+    "1319546": {
+      "release_groups_added": 63241,
+      "releases_added": 82346,
+      "artists_added": 74846,
+      "works_added": 251839
+    },
+    "606889": {
+      "release_groups_added": 51130,
+      "releases_added": 78003,
+      "artists_added": 35143,
+      "works_added": 91053
+    },
+    "326637": {
+      "release_groups_added": 7890,
+      "releases_added": 12549,
+      "artists_added": 37744,
+      "works_added": 177308
+    },
+    "508573": {
+      "release_groups_added": 17774,
+      "releases_added": 26474,
+      "artists_added": 19651,
+      "works_added": 40382
+    },
+    "224057": {
+      "release_groups_added": 13467,
+      "releases_added": 40467,
+      "artists_added": 63138,
+      "works_added": 21083
+    },
+    "2012171": {
+      "release_groups_added": 23996,
+      "releases_added": 24193,
+      "artists_added": 12257,
+      "works_added": 58990
+    },
+    "414320": {
+      "release_groups_added": 2767,
+      "releases_added": 4095,
+      "artists_added": 10106,
+      "works_added": 41291
+    },
+    "632964": {
+      "release_groups_added": 3539,
+      "releases_added": 6838,
+      "artists_added": 8201,
+      "works_added": 27590
+    },
+    "561161": {
+      "release_groups_added": 32108,
+      "releases_added": 34235,
+      "artists_added": 12990,
+      "works_added": 1841
+    },
+    "1317704": {
+      "release_groups_added": 4341,
+      "releases_added": 19544,
+      "artists_added": 11285,
+      "works_added": 16213
+    },
+    "199482": {
+      "release_groups_added": 1830,
+      "releases_added": 5036,
+      "artists_added": 2814,
+      "works_added": 5468
+    },
+    "2033600": {
+      "release_groups_added": 1603,
+      "releases_added": 3976,
+      "artists_added": 9184,
+      "works_added": 22067
+    },
+    "2409660": {
+      "release_groups_added": 16992,
+      "releases_added": 19809,
+      "artists_added": 6308,
+      "works_added": 22028
+    },
+    "52304": {
+      "release_groups_added": 13896,
+      "releases_added": 18833,
+      "artists_added": 34423,
+      "works_added": 51531
+    },
+    "1126444": {
+      "release_groups_added": 2233,
+      "releases_added": 7585,
+      "artists_added": 992,
+      "works_added": 1611
+    },
+    "407536": {
+      "release_groups_added": 552,
+      "releases_added": 768,
+      "artists_added": 6368,
+      "works_added": 8163
+    },
+    "38521": {
+      "release_groups_added": 2003,
+      "releases_added": 4297,
+      "artists_added": 24090,
+      "works_added": 4672
+    },
+    "414287": {
+      "release_groups_added": 21045,
+      "releases_added": 38123,
+      "artists_added": 9958,
+      "works_added": 17843
+    },
+    "62590": {
+      "release_groups_added": 878,
+      "releases_added": 1367,
+      "artists_added": 6909,
+      "works_added": 7909
+    },
+    "321185": {
+      "release_groups_added": 77495,
+      "releases_added": 82057,
+      "artists_added": 34900,
+      "works_added": 325
+    },
+    "564208": {
+      "release_groups_added": 10440,
+      "releases_added": 21352,
+      "artists_added": 29215,
+      "works_added": 22628
+    },
+    "695015": {
+      "release_groups_added": 785,
+      "releases_added": 899,
+      "artists_added": 588,
+      "works_added": 4412
+    },
+    "2072769": {
+      "release_groups_added": 18144,
+      "releases_added": 31494,
+      "artists_added": 7847,
+      "works_added": 3470
+    },
+    "458970": {
+      "release_groups_added": 6376,
+      "releases_added": 10084,
+      "artists_added": 10142,
+      "works_added": 14520
+    },
+    "1559371": {
+      "release_groups_added": 8789,
+      "releases_added": 15485,
+      "artists_added": 4150,
+      "works_added": 1814
+    },
+    "859896": {
+      "release_groups_added": 20062,
+      "releases_added": 21037,
+      "artists_added": 1677,
+      "works_added": 0
+    },
+    "4": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "483691": {
+      "release_groups_added": 15279,
+      "releases_added": 15736,
+      "artists_added": 11467,
+      "works_added": 21131
+    },
+    "1896301": {
+      "release_groups_added": 2398,
+      "releases_added": 2451,
+      "artists_added": 5403,
+      "works_added": 14430
+    },
+    "360197": {
+      "release_groups_added": 604,
+      "releases_added": 1111,
+      "artists_added": 1739,
+      "works_added": 2143
+    },
+    "251759": {
+      "release_groups_added": 4237,
+      "releases_added": 7721,
+      "artists_added": 3130,
+      "works_added": 27464
+    },
+    "1785874": {
+      "release_groups_added": 127,
+      "releases_added": 387,
+      "artists_added": 1965,
+      "works_added": 4539
+    },
+    "2274995": {
+      "release_groups_added": 33571,
+      "releases_added": 38689,
+      "artists_added": 8896,
+      "works_added": 34150
+    },
+    "750687": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "2081662": {
+      "release_groups_added": 6168,
+      "releases_added": 13172,
+      "artists_added": 2441,
+      "works_added": 43323
+    },
+    "127391": {
+      "release_groups_added": 1027,
+      "releases_added": 2807,
+      "artists_added": 6807,
+      "works_added": 162
+    },
+    "502063": {
+      "release_groups_added": 22485,
+      "releases_added": 37608,
+      "artists_added": 7214,
+      "works_added": 3747
+    },
+    "667117": {
+      "release_groups_added": 3327,
+      "releases_added": 4110,
+      "artists_added": 11220,
+      "works_added": 0
+    },
+    "2094889": {
+      "release_groups_added": 6867,
+      "releases_added": 15585,
+      "artists_added": 7572,
+      "works_added": 16189
+    },
+    "1440677": {
+      "release_groups_added": 20676,
+      "releases_added": 23865,
+      "artists_added": 6978,
+      "works_added": 24270
+    },
+    "1244720": {
+      "release_groups_added": 3907,
+      "releases_added": 4480,
+      "artists_added": 6340,
+      "works_added": 29098
+    },
+    "554353": {
+      "release_groups_added": 10639,
+      "releases_added": 22836,
+      "artists_added": 8952,
+      "works_added": 10367
+    },
+    "123970": {
+      "release_groups_added": 2789,
+      "releases_added": 7446,
+      "artists_added": 813,
+      "works_added": 1959
+    },
+    "285909": {
+      "release_groups_added": 787,
+      "releases_added": 3968,
+      "artists_added": 5380,
+      "works_added": 6017
+    },
+    "2110175": {
+      "release_groups_added": 943,
+      "releases_added": 2598,
+      "artists_added": 1314,
+      "works_added": 65
+    },
+    "1532636": {
+      "release_groups_added": 64841,
+      "releases_added": 68933,
+      "artists_added": 24279,
+      "works_added": 1936
+    },
+    "691876": {
+      "release_groups_added": 9951,
+      "releases_added": 15830,
+      "artists_added": 10107,
+      "works_added": 6126
+    },
+    "446280": {
+      "release_groups_added": 399,
+      "releases_added": 1753,
+      "artists_added": 233,
+      "works_added": 1207
+    },
+    "2138780": {
+      "release_groups_added": 3326,
+      "releases_added": 6052,
+      "artists_added": 4981,
+      "works_added": 17331
+    },
+    "192108": {
+      "release_groups_added": 4513,
+      "releases_added": 13020,
+      "artists_added": 20144,
+      "works_added": 7072
+    },
+    "481628": {
+      "release_groups_added": 6,
+      "releases_added": 5,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "1764008": {
+      "release_groups_added": 6463,
+      "releases_added": 8844,
+      "artists_added": 3916,
+      "works_added": 20357
+    },
+    "372321": {
+      "release_groups_added": 246,
+      "releases_added": 1628,
+      "artists_added": 1229,
+      "works_added": 3130
+    },
+    "259488": {
+      "release_groups_added": 1018,
+      "releases_added": 2056,
+      "artists_added": 3464,
+      "works_added": 2948
+    },
+    "1962867": {
+      "release_groups_added": 1062,
+      "releases_added": 2445,
+      "artists_added": 1685,
+      "works_added": 8077
+    },
+    "668853": {
+      "release_groups_added": 439,
+      "releases_added": 525,
+      "artists_added": 1558,
+      "works_added": 5524
+    },
+    "619519": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "1448572": {
+      "release_groups_added": 3369,
+      "releases_added": 4509,
+      "artists_added": 12099,
+      "works_added": 9941
+    },
+    "463559": {
+      "release_groups_added": 11373,
+      "releases_added": 16685,
+      "artists_added": 8272,
+      "works_added": 1549
+    },
+    "1723579": {
+      "release_groups_added": 18003,
+      "releases_added": 22714,
+      "artists_added": 7641,
+      "works_added": 25
+    },
+    "339923": {
+      "release_groups_added": 778,
+      "releases_added": 1821,
+      "artists_added": 11875,
+      "works_added": 446
+    },
+    "53705": {
+      "release_groups_added": 1064,
+      "releases_added": 4792,
+      "artists_added": 3205,
+      "works_added": 1706
+    },
+    "2463836": {
+      "release_groups_added": 5148,
+      "releases_added": 7665,
+      "artists_added": 1893,
+      "works_added": 2557
+    },
+    "1032528": {
+      "release_groups_added": 4746,
+      "releases_added": 7016,
+      "artists_added": 4998,
+      "works_added": 2767
+    },
+    "1435831": {
+      "release_groups_added": 3923,
+      "releases_added": 12550,
+      "artists_added": 918,
+      "works_added": 0
+    },
+    "1148900": {
+      "release_groups_added": 2668,
+      "releases_added": 5547,
+      "artists_added": 5666,
+      "works_added": 14100
+    },
+    "1307588": {
+      "release_groups_added": 8955,
+      "releases_added": 11592,
+      "artists_added": 12676,
+      "works_added": 9658
+    },
+    "1968837": {
+      "release_groups_added": 185,
+      "releases_added": 725,
+      "artists_added": 6455,
+      "works_added": 10520
+    },
+    "29366": {
+      "release_groups_added": 2360,
+      "releases_added": 9811,
+      "artists_added": 3518,
+      "works_added": 12521
+    },
+    "1975551": {
+      "release_groups_added": 1125,
+      "releases_added": 1918,
+      "artists_added": 2591,
+      "works_added": 1993
+    },
+    "291699": {
+      "release_groups_added": 1142,
+      "releases_added": 2881,
+      "artists_added": 7590,
+      "works_added": 4444
+    },
+    "2107733": {
+      "release_groups_added": 5636,
+      "releases_added": 9302,
+      "artists_added": 2051,
+      "works_added": 1797
+    },
+    "594475": {
+      "release_groups_added": 22089,
+      "releases_added": 26924,
+      "artists_added": 11442,
+      "works_added": 578
+    },
+    "2134167": {
+      "release_groups_added": 2820,
+      "releases_added": 5811,
+      "artists_added": 6205,
+      "works_added": 12545
+    },
+    "388788": {
+      "release_groups_added": 679,
+      "releases_added": 1276,
+      "artists_added": 1234,
+      "works_added": 402
+    },
+    "443915": {
+      "release_groups_added": 2501,
+      "releases_added": 4095,
+      "artists_added": 3490,
+      "works_added": 11013
+    },
+    "586689": {
+      "release_groups_added": 5644,
+      "releases_added": 8548,
+      "artists_added": 18214,
+      "works_added": 348
+    },
+    "420821": {
+      "release_groups_added": 6970,
+      "releases_added": 12605,
+      "artists_added": 5524,
+      "works_added": 13648
+    },
+    "1766068": {
+      "release_groups_added": 3433,
+      "releases_added": 3815,
+      "artists_added": 1692,
+      "works_added": 70404
+    },
+    "606695": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 1
+    },
+    "2669579": {
+      "release_groups_added": 2529,
+      "releases_added": 3506,
+      "artists_added": 6018,
+      "works_added": 2948
+    },
+    "841998": {
+      "release_groups_added": 655,
+      "releases_added": 706,
+      "artists_added": 534,
+      "works_added": 179
+    },
+    "2268906": {
+      "release_groups_added": 3818,
+      "releases_added": 5120,
+      "artists_added": 1691,
+      "works_added": 7891
+    },
+    "2039206": {
+      "release_groups_added": 3508,
+      "releases_added": 4176,
+      "artists_added": 2203,
+      "works_added": 20432
+    },
+    "36714": {
+      "release_groups_added": 2520,
+      "releases_added": 11795,
+      "artists_added": 5034,
+      "works_added": 5
+    },
+    "2158501": {
+      "release_groups_added": 427,
+      "releases_added": 11448,
+      "artists_added": 1215,
+      "works_added": 2190
+    },
+    "95678": {
+      "release_groups_added": 3011,
+      "releases_added": 23304,
+      "artists_added": 20417,
+      "works_added": 1828
+    },
+    "296262": {
+      "release_groups_added": 5964,
+      "releases_added": 14613,
+      "artists_added": 6993,
+      "works_added": 631
+    },
+    "1183270": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "2568506": {
+      "release_groups_added": 17558,
+      "releases_added": 19440,
+      "artists_added": 7254,
+      "works_added": 9997
+    },
+    "2169167": {
+      "release_groups_added": 3804,
+      "releases_added": 11507,
+      "artists_added": 1861,
+      "works_added": 1512
+    },
+    "1907346": {
+      "release_groups_added": 13114,
+      "releases_added": 15021,
+      "artists_added": 4410,
+      "works_added": 615
+    },
+    "165158": {
+      "release_groups_added": 2765,
+      "releases_added": 3964,
+      "artists_added": 4556,
+      "works_added": 194
+    },
+    "1551885": {
+      "release_groups_added": 6076,
+      "releases_added": 7650,
+      "artists_added": 6122,
+      "works_added": 8533
+    },
+    "141250": {
+      "release_groups_added": 2553,
+      "releases_added": 4839,
+      "artists_added": 1935,
+      "works_added": 599
+    },
+    "1796307": {
+      "release_groups_added": 1750,
+      "releases_added": 1800,
+      "artists_added": 19600,
+      "works_added": 50
+    },
+    "1737390": {
+      "release_groups_added": 52,
+      "releases_added": 103,
+      "artists_added": 1742,
+      "works_added": 6291
+    },
+    "85608": {
+      "release_groups_added": 5706,
+      "releases_added": 8038,
+      "artists_added": 2930,
+      "works_added": 832
+    },
+    "2363013": {
+      "release_groups_added": 12772,
+      "releases_added": 15336,
+      "artists_added": 6217,
+      "works_added": 901
+    },
+    "782147": {
+      "release_groups_added": 33002,
+      "releases_added": 34035,
+      "artists_added": 24655,
+      "works_added": 0
+    },
+    "1590527": {
+      "release_groups_added": 5024,
+      "releases_added": 5859,
+      "artists_added": 2606,
+      "works_added": 9501
+    },
+    "1765600": {
+      "release_groups_added": 494,
+      "releases_added": 1472,
+      "artists_added": 679,
+      "works_added": 2533
+    },
+    "2162162": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "1717618": {
+      "release_groups_added": 9307,
+      "releases_added": 9754,
+      "artists_added": 6115,
+      "works_added": 1428
+    },
+    "705683": {
+      "release_groups_added": 3713,
+      "releases_added": 4031,
+      "artists_added": 5463,
+      "works_added": 1134
+    },
+    "704456": {
+      "release_groups_added": 345,
+      "releases_added": 691,
+      "artists_added": 714,
+      "works_added": 54
+    },
+    "2185208": {
+      "release_groups_added": 2102,
+      "releases_added": 3797,
+      "artists_added": 782,
+      "works_added": 3693
+    },
+    "99023": {
+      "release_groups_added": 491,
+      "releases_added": 1674,
+      "artists_added": 198,
+      "works_added": 5495
+    },
+    "1304728": {
+      "release_groups_added": 2977,
+      "releases_added": 4496,
+      "artists_added": 4180,
+      "works_added": 9634
+    },
+    "185722": {
+      "release_groups_added": 20,
+      "releases_added": 58,
+      "artists_added": 451,
+      "works_added": 361
+    },
+    "1313697": {
+      "release_groups_added": 12210,
+      "releases_added": 13569,
+      "artists_added": 13808,
+      "works_added": 5369
+    },
+    "300757": {
+      "release_groups_added": 13094,
+      "releases_added": 15615,
+      "artists_added": 3851,
+      "works_added": 21607
+    },
+    "275512": {
+      "release_groups_added": 1157,
+      "releases_added": 2328,
+      "artists_added": 2084,
+      "works_added": 6814
+    },
+    "1362851": {
+      "release_groups_added": 574,
+      "releases_added": 610,
+      "artists_added": 442,
+      "works_added": 9767
+    },
+    "2197464": {
+      "release_groups_added": 1643,
+      "releases_added": 2139,
+      "artists_added": 1042,
+      "works_added": 18775
+    },
+    "119175": {
+      "release_groups_added": 2545,
+      "releases_added": 5121,
+      "artists_added": 7027,
+      "works_added": 345
+    },
+    "68620": {
+      "release_groups_added": 63,
+      "releases_added": 1452,
+      "artists_added": 2215,
+      "works_added": 941
+    },
+    "261743": {
+      "release_groups_added": 10434,
+      "releases_added": 13823,
+      "artists_added": 1703,
+      "works_added": 0
+    },
+    "2055061": {
+      "release_groups_added": 7430,
+      "releases_added": 9498,
+      "artists_added": 2794,
+      "works_added": 14583
+    },
+    "2093892": {
+      "release_groups_added": 1063,
+      "releases_added": 1662,
+      "artists_added": 765,
+      "works_added": 3311
+    },
+    "26886": {
+      "release_groups_added": 6651,
+      "releases_added": 9399,
+      "artists_added": 5335,
+      "works_added": 1
+    },
+    "1265101": {
+      "release_groups_added": 966,
+      "releases_added": 2912,
+      "artists_added": 363,
+      "works_added": 131
+    },
+    "484929": {
+      "release_groups_added": 1466,
+      "releases_added": 2017,
+      "artists_added": 816,
+      "works_added": 699
+    },
+    "2307798": {
+      "release_groups_added": 2274,
+      "releases_added": 9409,
+      "artists_added": 1104,
+      "works_added": 585
+    },
+    "2486383": {
+      "release_groups_added": 2513,
+      "releases_added": 4285,
+      "artists_added": 2915,
+      "works_added": 5397
+    },
+    "115994": {
+      "release_groups_added": 554,
+      "releases_added": 1255,
+      "artists_added": 2225,
+      "works_added": 2564
+    },
+    "1629298": {
+      "release_groups_added": 749,
+      "releases_added": 782,
+      "artists_added": 1031,
+      "works_added": 4720
+    },
+    "635606": {
+      "release_groups_added": 345,
+      "releases_added": 520,
+      "artists_added": 1784,
+      "works_added": 930
+    },
+    "1986073": {
+      "release_groups_added": 11680,
+      "releases_added": 16130,
+      "artists_added": 3339,
+      "works_added": 9449
+    },
+    "1966792": {
+      "release_groups_added": 6615,
+      "releases_added": 6844,
+      "artists_added": 4010,
+      "works_added": 1670
+    },
+    "2029971": {
+      "release_groups_added": 5171,
+      "releases_added": 7349,
+      "artists_added": 2651,
+      "works_added": 7195
+    },
+    "464192": {
+      "release_groups_added": 4339,
+      "releases_added": 5370,
+      "artists_added": 2740,
+      "works_added": 13349
+    },
+    "1290924": {
+      "release_groups_added": 751,
+      "releases_added": 858,
+      "artists_added": 2411,
+      "works_added": 18522
+    },
+    "153545": {
+      "release_groups_added": 1578,
+      "releases_added": 3328,
+      "artists_added": 3515,
+      "works_added": 435
+    },
+    "125686": {
+      "release_groups_added": 2355,
+      "releases_added": 6154,
+      "artists_added": 2234,
+      "works_added": 514
+    },
+    "514699": {
+      "release_groups_added": 420,
+      "releases_added": 1257,
+      "artists_added": 2971,
+      "works_added": 5626
+    },
+    "1989327": {
+      "release_groups_added": 563,
+      "releases_added": 661,
+      "artists_added": 1841,
+      "works_added": 3678
+    },
+    "38393": {
+      "release_groups_added": 770,
+      "releases_added": 2161,
+      "artists_added": 4071,
+      "works_added": 2957
+    },
+    "1077594": {
+      "release_groups_added": 23946,
+      "releases_added": 28766,
+      "artists_added": 4818,
+      "works_added": 0
+    },
+    "385942": {
+      "release_groups_added": 556,
+      "releases_added": 2372,
+      "artists_added": 3505,
+      "works_added": 2986
+    },
+    "1302911": {
+      "release_groups_added": 2092,
+      "releases_added": 3600,
+      "artists_added": 1510,
+      "works_added": 1987
+    },
+    "275757": {
+      "release_groups_added": 4834,
+      "releases_added": 5241,
+      "artists_added": 3145,
+      "works_added": 3916
+    },
+    "697713": {
+      "release_groups_added": 4283,
+      "releases_added": 5971,
+      "artists_added": 3262,
+      "works_added": 4098
+    },
+    "476335": {
+      "release_groups_added": 452,
+      "releases_added": 789,
+      "artists_added": 5758,
+      "works_added": 5947
+    },
+    "37736": {
+      "release_groups_added": 139,
+      "releases_added": 1847,
+      "artists_added": 1193,
+      "works_added": 34
+    },
+    "1585205": {
+      "release_groups_added": 9642,
+      "releases_added": 14084,
+      "artists_added": 2949,
+      "works_added": 474
+    },
+    "262912": {
+      "release_groups_added": 1084,
+      "releases_added": 2283,
+      "artists_added": 4981,
+      "works_added": 8821
+    },
+    "2270828": {
+      "release_groups_added": 9634,
+      "releases_added": 9948,
+      "artists_added": 3331,
+      "works_added": 961
+    },
+    "1651285": {
+      "release_groups_added": 1230,
+      "releases_added": 1506,
+      "artists_added": 2976,
+      "works_added": 2637
+    },
+    "1178207": {
+      "release_groups_added": 2943,
+      "releases_added": 4337,
+      "artists_added": 3132,
+      "works_added": 1691
+    },
+    "1975307": {
+      "release_groups_added": 1406,
+      "releases_added": 3372,
+      "artists_added": 2850,
+      "works_added": 560
+    },
+    "2900089": {
+      "release_groups_added": 2882,
+      "releases_added": 2932,
+      "artists_added": 727,
+      "works_added": 0
+    },
+    "625925": {
+      "release_groups_added": 827,
+      "releases_added": 1647,
+      "artists_added": 2864,
+      "works_added": 2796
+    },
+    "636": {
+      "release_groups_added": 937,
+      "releases_added": 3191,
+      "artists_added": 1871,
+      "works_added": 5902
+    },
+    "286883": {
+      "release_groups_added": 304,
+      "releases_added": 480,
+      "artists_added": 170,
+      "works_added": 395
+    },
+    "2116823": {
+      "release_groups_added": 9672,
+      "releases_added": 11709,
+      "artists_added": 2620,
+      "works_added": 3479
+    },
+    "516442": {
+      "release_groups_added": 2429,
+      "releases_added": 3772,
+      "artists_added": 4736,
+      "works_added": 5283
+    },
+    "2069151": {
+      "release_groups_added": 2826,
+      "releases_added": 4450,
+      "artists_added": 773,
+      "works_added": 4459
+    },
+    "566868": {
+      "release_groups_added": 1018,
+      "releases_added": 1341,
+      "artists_added": 624,
+      "works_added": 6293
+    },
+    "1296719": {
+      "release_groups_added": 9840,
+      "releases_added": 10380,
+      "artists_added": 760,
+      "works_added": 1650
+    },
+    "1856720": {
+      "release_groups_added": 119,
+      "releases_added": 693,
+      "artists_added": 703,
+      "works_added": 9149
+    },
+    "2430225": {
+      "release_groups_added": 4070,
+      "releases_added": 5020,
+      "artists_added": 409,
+      "works_added": 32
+    },
+    "607333": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "2652974": {
+      "release_groups_added": 1165,
+      "releases_added": 1342,
+      "artists_added": 853,
+      "works_added": 1
+    },
+    "2404756": {
+      "release_groups_added": 5589,
+      "releases_added": 5799,
+      "artists_added": 2608,
+      "works_added": 200
+    },
+    "85780": {
+      "release_groups_added": 987,
+      "releases_added": 2700,
+      "artists_added": 1021,
+      "works_added": 1994
+    },
+    "166392": {
+      "release_groups_added": 645,
+      "releases_added": 2525,
+      "artists_added": 1190,
+      "works_added": 1105
+    },
+    "103426": {
+      "release_groups_added": 1778,
+      "releases_added": 4044,
+      "artists_added": 1995,
+      "works_added": 4421
+    },
+    "334556": {
+      "release_groups_added": 563,
+      "releases_added": 1047,
+      "artists_added": 2573,
+      "works_added": 14722
+    },
+    "335606": {
+      "release_groups_added": 3475,
+      "releases_added": 7578,
+      "artists_added": 1151,
+      "works_added": 958
+    },
+    "377630": {
+      "release_groups_added": 1039,
+      "releases_added": 1576,
+      "artists_added": 3646,
+      "works_added": 4004
+    },
+    "2384952": {
+      "release_groups_added": 1108,
+      "releases_added": 2835,
+      "artists_added": 751,
+      "works_added": 2090
+    },
+    "2301688": {
+      "release_groups_added": 2123,
+      "releases_added": 4366,
+      "artists_added": 1822,
+      "works_added": 1391
+    },
+    "1509086": {
+      "release_groups_added": 453,
+      "releases_added": 726,
+      "artists_added": 2083,
+      "works_added": 3271
+    },
+    "70144": {
+      "release_groups_added": 1482,
+      "releases_added": 3638,
+      "artists_added": 2733,
+      "works_added": 3870
+    },
+    "2227978": {
+      "release_groups_added": 791,
+      "releases_added": 1725,
+      "artists_added": 1064,
+      "works_added": 3085
+    },
+    "2221405": {
+      "release_groups_added": 1063,
+      "releases_added": 1770,
+      "artists_added": 1057,
+      "works_added": 1297
+    },
+    "1278230": {
+      "release_groups_added": 781,
+      "releases_added": 2472,
+      "artists_added": 1680,
+      "works_added": 2816
+    },
+    "2126762": {
+      "release_groups_added": 760,
+      "releases_added": 1640,
+      "artists_added": 1015,
+      "works_added": 2138
+    },
+    "215985": {
+      "release_groups_added": 11655,
+      "releases_added": 13800,
+      "artists_added": 17320,
+      "works_added": 0
+    },
+    "1601832": {
+      "release_groups_added": 809,
+      "releases_added": 1445,
+      "artists_added": 3028,
+      "works_added": 5283
+    },
+    "495807": {
+      "release_groups_added": 441,
+      "releases_added": 808,
+      "artists_added": 936,
+      "works_added": 3796
+    },
+    "2630396": {
+      "release_groups_added": 4092,
+      "releases_added": 4291,
+      "artists_added": 656,
+      "works_added": 1178
+    },
+    "1807782": {
+      "release_groups_added": 6408,
+      "releases_added": 10704,
+      "artists_added": 1302,
+      "works_added": 614
+    },
+    "68787": {
+      "release_groups_added": 70,
+      "releases_added": 576,
+      "artists_added": 1094,
+      "works_added": 13247
+    },
+    "626919": {
+      "release_groups_added": 5134,
+      "releases_added": 5311,
+      "artists_added": 4076,
+      "works_added": 628
+    },
+    "421304": {
+      "release_groups_added": 409,
+      "releases_added": 600,
+      "artists_added": 834,
+      "works_added": 4735
+    },
+    "563876": {
+      "release_groups_added": 217,
+      "releases_added": 526,
+      "artists_added": 2425,
+      "works_added": 5103
+    },
+    "626526": {
+      "release_groups_added": 1043,
+      "releases_added": 2078,
+      "artists_added": 3380,
+      "works_added": 2162
+    },
+    "190358": {
+      "release_groups_added": 816,
+      "releases_added": 1483,
+      "artists_added": 3402,
+      "works_added": 3483
+    },
+    "2553919": {
+      "release_groups_added": 532,
+      "releases_added": 1056,
+      "artists_added": 455,
+      "works_added": 1451
+    },
+    "2018433": {
+      "release_groups_added": 659,
+      "releases_added": 3208,
+      "artists_added": 158,
+      "works_added": 393
+    },
+    "2172809": {
+      "release_groups_added": 463,
+      "releases_added": 1157,
+      "artists_added": 266,
+      "works_added": 3018
+    },
+    "2231162": {
+      "release_groups_added": 5732,
+      "releases_added": 12244,
+      "artists_added": 2256,
+      "works_added": 0
+    },
+    "442739": {
+      "release_groups_added": 1652,
+      "releases_added": 2363,
+      "artists_added": 2433,
+      "works_added": 4583
+    },
+    "229784": {
+      "release_groups_added": 1468,
+      "releases_added": 2191,
+      "artists_added": 5986,
+      "works_added": 4298
+    },
+    "2449849": {
+      "release_groups_added": 1459,
+      "releases_added": 5720,
+      "artists_added": 447,
+      "works_added": 1895
+    },
+    "2371430": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "2050127": {
+      "release_groups_added": 152,
+      "releases_added": 645,
+      "artists_added": 827,
+      "works_added": 4679
+    },
+    "712170": {
+      "release_groups_added": 2859,
+      "releases_added": 5833,
+      "artists_added": 1822,
+      "works_added": 1406
+    },
+    "1486173": {
+      "release_groups_added": 516,
+      "releases_added": 1190,
+      "artists_added": 1803,
+      "works_added": 7635
+    },
+    "1469086": {
+      "release_groups_added": 1353,
+      "releases_added": 3135,
+      "artists_added": 1081,
+      "works_added": 2396
+    },
+    "2530360": {
+      "release_groups_added": 465,
+      "releases_added": 1015,
+      "artists_added": 858,
+      "works_added": 1751
+    },
+    "2077436": {
+      "release_groups_added": 539,
+      "releases_added": 921,
+      "artists_added": 321,
+      "works_added": 1293
+    },
+    "1454102": {
+      "release_groups_added": 2809,
+      "releases_added": 3032,
+      "artists_added": 862,
+      "works_added": 4087
+    },
+    "2295723": {
+      "release_groups_added": 3328,
+      "releases_added": 4940,
+      "artists_added": 2443,
+      "works_added": 4159
+    },
+    "2251134": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "2160932": {
+      "release_groups_added": 9891,
+      "releases_added": 11637,
+      "artists_added": 4739,
+      "works_added": 17
+    },
+    "81537": {
+      "release_groups_added": 1196,
+      "releases_added": 2644,
+      "artists_added": 2907,
+      "works_added": 45
+    },
+    "1299187": {
+      "release_groups_added": 25988,
+      "releases_added": 25421,
+      "artists_added": 3072,
+      "works_added": 0
+    },
+    "670166": {
+      "release_groups_added": 2963,
+      "releases_added": 5180,
+      "artists_added": 2429,
+      "works_added": 26
+    },
+    "2111142": {
+      "release_groups_added": 4425,
+      "releases_added": 5241,
+      "artists_added": 4541,
+      "works_added": 0
+    },
+    "324215": {
+      "release_groups_added": 1219,
+      "releases_added": 1534,
+      "artists_added": 3186,
+      "works_added": 10744
+    },
+    "164047": {
+      "release_groups_added": 1278,
+      "releases_added": 3094,
+      "artists_added": 1364,
+      "works_added": 17187
+    },
+    "2377286": {
+      "release_groups_added": 3490,
+      "releases_added": 4154,
+      "artists_added": 2226,
+      "works_added": 1088
+    },
+    "2535067": {
+      "release_groups_added": 779,
+      "releases_added": 2293,
+      "artists_added": 1229,
+      "works_added": 1647
+    },
+    "1281681": {
+      "release_groups_added": 424,
+      "releases_added": 2012,
+      "artists_added": 110,
+      "works_added": 17772
+    },
+    "1286958": {
+      "release_groups_added": 2860,
+      "releases_added": 4257,
+      "artists_added": 2360,
+      "works_added": 1033
+    },
+    "410770": {
+      "release_groups_added": 572,
+      "releases_added": 806,
+      "artists_added": 3476,
+      "works_added": 6171
+    },
+    "2235262": {
+      "release_groups_added": 1867,
+      "releases_added": 2945,
+      "artists_added": 491,
+      "works_added": 0
+    },
+    "219335": {
+      "release_groups_added": 3359,
+      "releases_added": 6052,
+      "artists_added": 2095,
+      "works_added": 939
+    },
+    "2368737": {
+      "release_groups_added": 2169,
+      "releases_added": 3655,
+      "artists_added": 908,
+      "works_added": 1392
+    },
+    "2511845": {
+      "release_groups_added": 1862,
+      "releases_added": 2348,
+      "artists_added": 750,
+      "works_added": 998
+    },
+    "2013231": {
+      "release_groups_added": 2525,
+      "releases_added": 3363,
+      "artists_added": 867,
+      "works_added": 104
+    },
+    "1988842": {
+      "release_groups_added": 1603,
+      "releases_added": 2630,
+      "artists_added": 1078,
+      "works_added": 4120
+    },
+    "287138": {
+      "release_groups_added": 198,
+      "releases_added": 514,
+      "artists_added": 709,
+      "works_added": 275
+    },
+    "102145": {
+      "release_groups_added": 3268,
+      "releases_added": 6344,
+      "artists_added": 4648,
+      "works_added": 7419
+    },
+    "35896": {
+      "release_groups_added": 155,
+      "releases_added": 230,
+      "artists_added": 367,
+      "works_added": 824
+    },
+    "1364595": {
+      "release_groups_added": 25,
+      "releases_added": 25,
+      "artists_added": 1292,
+      "works_added": 11172
+    },
+    "2259630": {
+      "release_groups_added": 501,
+      "releases_added": 1666,
+      "artists_added": 547,
+      "works_added": 1321
+    },
+    "2380517": {
+      "release_groups_added": 570,
+      "releases_added": 1003,
+      "artists_added": 294,
+      "works_added": 1555
+    },
+    "584268": {
+      "release_groups_added": 1030,
+      "releases_added": 1509,
+      "artists_added": 2540,
+      "works_added": 1895
+    },
+    "137798": {
+      "release_groups_added": 50,
+      "releases_added": 1625,
+      "artists_added": 4644,
+      "works_added": 101
+    },
+    "748388": {
+      "release_groups_added": 513,
+      "releases_added": 634,
+      "artists_added": 673,
+      "works_added": 5056
+    },
+    "2091047": {
+      "release_groups_added": 1235,
+      "releases_added": 2381,
+      "artists_added": 234,
+      "works_added": 0
+    },
+    "1318186": {
+      "release_groups_added": 527,
+      "releases_added": 692,
+      "artists_added": 1610,
+      "works_added": 1563
+    },
+    "24942": {
+      "release_groups_added": 480,
+      "releases_added": 1584,
+      "artists_added": 4268,
+      "works_added": 5539
+    },
+    "2280702": {
+      "release_groups_added": 6615,
+      "releases_added": 8873,
+      "artists_added": 2792,
+      "works_added": 378
+    },
+    "2081980": {
+      "release_groups_added": 525,
+      "releases_added": 673,
+      "artists_added": 1084,
+      "works_added": 3983
+    },
+    "1885715": {
+      "release_groups_added": 88,
+      "releases_added": 101,
+      "artists_added": 456,
+      "works_added": 1441
+    },
+    "2496932": {
+      "release_groups_added": 13,
+      "releases_added": 26,
+      "artists_added": 45,
+      "works_added": 684
+    },
+    "1765728": {
+      "release_groups_added": 419,
+      "releases_added": 526,
+      "artists_added": 4485,
+      "works_added": 1034
+    },
+    "388561": {
+      "release_groups_added": 9388,
+      "releases_added": 9606,
+      "artists_added": 2746,
+      "works_added": 257
+    },
+    "2592792": {
+      "release_groups_added": 343,
+      "releases_added": 506,
+      "artists_added": 654,
+      "works_added": 2620
+    },
+    "2062079": {
+      "release_groups_added": 4055,
+      "releases_added": 4969,
+      "artists_added": 1300,
+      "works_added": 30
+    },
+    "1289742": {
+      "release_groups_added": 182,
+      "releases_added": 364,
+      "artists_added": 835,
+      "works_added": 6963
+    },
+    "2114058": {
+      "release_groups_added": 4153,
+      "releases_added": 6579,
+      "artists_added": 2214,
+      "works_added": 1116
+    },
+    "298717": {
+      "release_groups_added": 311,
+      "releases_added": 725,
+      "artists_added": 1623,
+      "works_added": 3713
+    },
+    "2135992": {
+      "release_groups_added": 171,
+      "releases_added": 298,
+      "artists_added": 977,
+      "works_added": 1004
+    },
+    "481744": {
+      "release_groups_added": 205,
+      "releases_added": 1167,
+      "artists_added": 2290,
+      "works_added": 2088
+    },
+    "2351724": {
+      "release_groups_added": 1893,
+      "releases_added": 2510,
+      "artists_added": 1839,
+      "works_added": 1434
+    },
+    "68850": {
+      "release_groups_added": 1640,
+      "releases_added": 3364,
+      "artists_added": 2524,
+      "works_added": 226
+    },
+    "72801": {
+      "release_groups_added": 18,
+      "releases_added": 895,
+      "artists_added": 564,
+      "works_added": 0
+    },
+    "2621337": {
+      "release_groups_added": 2839,
+      "releases_added": 3880,
+      "artists_added": 1301,
+      "works_added": 1786
+    },
+    "1332773": {
+      "release_groups_added": 195,
+      "releases_added": 273,
+      "artists_added": 456,
+      "works_added": 1093
+    },
+    "2285340": {
+      "release_groups_added": 98,
+      "releases_added": 534,
+      "artists_added": 532,
+      "works_added": 2063
+    },
+    "1930774": {
+      "release_groups_added": 19,
+      "releases_added": 25,
+      "artists_added": 195,
+      "works_added": 2778
+    },
+    "2272100": {
+      "release_groups_added": 6461,
+      "releases_added": 10217,
+      "artists_added": 1350,
+      "works_added": 18
+    },
+    "379873": {
+      "release_groups_added": 224,
+      "releases_added": 1507,
+      "artists_added": 89,
+      "works_added": 173
+    },
+    "2112109": {
+      "release_groups_added": 232,
+      "releases_added": 514,
+      "artists_added": 101,
+      "works_added": 483
+    },
+    "848980": {
+      "release_groups_added": 26,
+      "releases_added": 143,
+      "artists_added": 625,
+      "works_added": 2027
+    },
+    "1322507": {
+      "release_groups_added": 494,
+      "releases_added": 1100,
+      "artists_added": 862,
+      "works_added": 1646
+    },
+    "657841": {
+      "release_groups_added": 2175,
+      "releases_added": 3377,
+      "artists_added": 2958,
+      "works_added": 0
+    },
+    "1919220": {
+      "release_groups_added": 2418,
+      "releases_added": 2676,
+      "artists_added": 377,
+      "works_added": 0
+    },
+    "505621": {
+      "release_groups_added": 440,
+      "releases_added": 3747,
+      "artists_added": 848,
+      "works_added": 4093
+    },
+    "333050": {
+      "release_groups_added": 123,
+      "releases_added": 493,
+      "artists_added": 3934,
+      "works_added": 323
+    },
+    "2182152": {
+      "release_groups_added": 62,
+      "releases_added": 302,
+      "artists_added": 339,
+      "works_added": 2362
+    },
+    "1969837": {
+      "release_groups_added": 240,
+      "releases_added": 458,
+      "artists_added": 338,
+      "works_added": 657
+    },
+    "2051067": {
+      "release_groups_added": 1988,
+      "releases_added": 3293,
+      "artists_added": 1716,
+      "works_added": 1543
+    },
+    "453993": {
+      "release_groups_added": 1226,
+      "releases_added": 1624,
+      "artists_added": 859,
+      "works_added": 2933
+    },
+    "1807008": {
+      "release_groups_added": 122,
+      "releases_added": 418,
+      "artists_added": 457,
+      "works_added": 2028
+    },
+    "2065135": {
+      "release_groups_added": 476,
+      "releases_added": 620,
+      "artists_added": 288,
+      "works_added": 280
+    },
+    "1164294": {
+      "release_groups_added": 1067,
+      "releases_added": 1988,
+      "artists_added": 1509,
+      "works_added": 7
+    },
+    "2132768": {
+      "release_groups_added": 3256,
+      "releases_added": 3565,
+      "artists_added": 1426,
+      "works_added": 1886
+    },
+    "912264": {
+      "release_groups_added": 5257,
+      "releases_added": 6280,
+      "artists_added": 1329,
+      "works_added": 296
+    },
+    "2595955": {
+      "release_groups_added": 640,
+      "releases_added": 992,
+      "artists_added": 1707,
+      "works_added": 4090
+    },
+    "1298452": {
+      "release_groups_added": 26,
+      "releases_added": 421,
+      "artists_added": 428,
+      "works_added": 1326
+    },
+    "1727112": {
+      "release_groups_added": 421,
+      "releases_added": 1381,
+      "artists_added": 398,
+      "works_added": 486
+    },
+    "1255383": {
+      "release_groups_added": 439,
+      "releases_added": 646,
+      "artists_added": 3886,
+      "works_added": 6262
+    },
+    "1886069": {
+      "release_groups_added": 338,
+      "releases_added": 352,
+      "artists_added": 1192,
+      "works_added": 3394
+    },
+    "2258363": {
+      "release_groups_added": 2498,
+      "releases_added": 3058,
+      "artists_added": 1430,
+      "works_added": 2633
+    },
+    "368713": {
+      "release_groups_added": 18,
+      "releases_added": 205,
+      "artists_added": 2668,
+      "works_added": 236
+    },
+    "1087579": {
+      "release_groups_added": 1659,
+      "releases_added": 2913,
+      "artists_added": 209,
+      "works_added": 1299
+    },
+    "1307315": {
+      "release_groups_added": 419,
+      "releases_added": 691,
+      "artists_added": 1524,
+      "works_added": 4584
+    },
+    "121591": {
+      "release_groups_added": 3672,
+      "releases_added": 4170,
+      "artists_added": 1703,
+      "works_added": 98
+    },
+    "2288146": {
+      "release_groups_added": 6162,
+      "releases_added": 6249,
+      "artists_added": 1270,
+      "works_added": 0
+    },
+    "2140105": {
+      "release_groups_added": 5360,
+      "releases_added": 7491,
+      "artists_added": 249,
+      "works_added": 3
+    },
+    "2391966": {
+      "release_groups_added": 304,
+      "releases_added": 353,
+      "artists_added": 1687,
+      "works_added": 3588
+    },
+    "2231394": {
+      "release_groups_added": 5709,
+      "releases_added": 6532,
+      "artists_added": 1340,
+      "works_added": 1594
+    },
+    "53217": {
+      "release_groups_added": 344,
+      "releases_added": 1310,
+      "artists_added": 2444,
+      "works_added": 3994
+    },
+    "461721": {
+      "release_groups_added": 331,
+      "releases_added": 1074,
+      "artists_added": 1438,
+      "works_added": 912
+    },
+    "2000398": {
+      "release_groups_added": 315,
+      "releases_added": 399,
+      "artists_added": 149,
+      "works_added": 433
+    },
+    "1295133": {
+      "release_groups_added": 6592,
+      "releases_added": 7978,
+      "artists_added": 6170,
+      "works_added": 638
+    },
+    "551316": {
+      "release_groups_added": 984,
+      "releases_added": 2170,
+      "artists_added": 1292,
+      "works_added": 2913
+    },
+    "593889": {
+      "release_groups_added": 309,
+      "releases_added": 629,
+      "artists_added": 557,
+      "works_added": 2481
+    },
+    "1948459": {
+      "release_groups_added": 2846,
+      "releases_added": 3504,
+      "artists_added": 1488,
+      "works_added": 1945
+    },
+    "2508960": {
+      "release_groups_added": 248,
+      "releases_added": 704,
+      "artists_added": 6392,
+      "works_added": 60
+    },
+    "2135509": {
+      "release_groups_added": 401,
+      "releases_added": 863,
+      "artists_added": 821,
+      "works_added": 5364
+    },
+    "1026557": {
+      "release_groups_added": 2750,
+      "releases_added": 4552,
+      "artists_added": 1493,
+      "works_added": 2138
+    },
+    "2793486": {
+      "release_groups_added": 166,
+      "releases_added": 258,
+      "artists_added": 583,
+      "works_added": 1046
+    },
+    "2433844": {
+      "release_groups_added": 1128,
+      "releases_added": 1328,
+      "artists_added": 768,
+      "works_added": 909
+    },
+    "2650751": {
+      "release_groups_added": 243,
+      "releases_added": 695,
+      "artists_added": 696,
+      "works_added": 3436
+    },
+    "1351874": {
+      "release_groups_added": 1848,
+      "releases_added": 2311,
+      "artists_added": 722,
+      "works_added": 1906
+    },
+    "47662": {
+      "release_groups_added": 682,
+      "releases_added": 1489,
+      "artists_added": 486,
+      "works_added": 949
+    },
+    "131748": {
+      "release_groups_added": 152,
+      "releases_added": 942,
+      "artists_added": 2143,
+      "works_added": 1002
+    },
+    "2031254": {
+      "release_groups_added": 12887,
+      "releases_added": 13173,
+      "artists_added": 2456,
+      "works_added": 0
+    },
+    "134975": {
+      "release_groups_added": 220,
+      "releases_added": 1421,
+      "artists_added": 890,
+      "works_added": 1450
+    },
+    "2274769": {
+      "release_groups_added": 458,
+      "releases_added": 1051,
+      "artists_added": 716,
+      "works_added": 1102
+    },
+    "927482": {
+      "release_groups_added": 7622,
+      "releases_added": 8256,
+      "artists_added": 9682,
+      "works_added": 0
+    },
+    "2111819": {
+      "release_groups_added": 1763,
+      "releases_added": 2236,
+      "artists_added": 1192,
+      "works_added": 3023
+    },
+    "478668": {
+      "release_groups_added": 785,
+      "releases_added": 2775,
+      "artists_added": 488,
+      "works_added": 2616
+    },
+    "374218": {
+      "release_groups_added": 1268,
+      "releases_added": 1833,
+      "artists_added": 2596,
+      "works_added": 641
+    },
+    "2760203": {
+      "release_groups_added": 414,
+      "releases_added": 1041,
+      "artists_added": 696,
+      "works_added": 2650
+    },
+    "2221961": {
+      "release_groups_added": 151,
+      "releases_added": 493,
+      "artists_added": 1197,
+      "works_added": 2472
+    },
+    "2207913": {
+      "release_groups_added": 5071,
+      "releases_added": 6556,
+      "artists_added": 1456,
+      "works_added": 0
+    },
+    "2295846": {
+      "release_groups_added": 1374,
+      "releases_added": 2175,
+      "artists_added": 1942,
+      "works_added": 687
+    },
+    "211750": {
+      "release_groups_added": 576,
+      "releases_added": 1061,
+      "artists_added": 527,
+      "works_added": 933
+    },
+    "425878": {
+      "release_groups_added": 528,
+      "releases_added": 3436,
+      "artists_added": 177,
+      "works_added": 0
+    },
+    "85840": {
+      "release_groups_added": 230,
+      "releases_added": 2980,
+      "artists_added": 1308,
+      "works_added": 3
+    },
+    "550498": {
+      "release_groups_added": 356,
+      "releases_added": 493,
+      "artists_added": 369,
+      "works_added": 1762
+    },
+    "506697": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "90541": {
+      "release_groups_added": 56,
+      "releases_added": 733,
+      "artists_added": 2155,
+      "works_added": 673
+    },
+    "2380401": {
+      "release_groups_added": 419,
+      "releases_added": 706,
+      "artists_added": 1475,
+      "works_added": 3538
+    },
+    "339844": {
+      "release_groups_added": 864,
+      "releases_added": 887,
+      "artists_added": 435,
+      "works_added": 3407
+    },
+    "2522228": {
+      "release_groups_added": 434,
+      "releases_added": 851,
+      "artists_added": 733,
+      "works_added": 1910
+    },
+    "283119": {
+      "release_groups_added": 943,
+      "releases_added": 2356,
+      "artists_added": 1379,
+      "works_added": 3022
+    },
+    "2608284": {
+      "release_groups_added": 1317,
+      "releases_added": 2018,
+      "artists_added": 138,
+      "works_added": 0
+    },
+    "698316": {
+      "release_groups_added": 514,
+      "releases_added": 970,
+      "artists_added": 743,
+      "works_added": 2769
+    },
+    "474599": {
+      "release_groups_added": 3665,
+      "releases_added": 5618,
+      "artists_added": 540,
+      "works_added": 9
+    },
+    "2198659": {
+      "release_groups_added": 4383,
+      "releases_added": 5320,
+      "artists_added": 1079,
+      "works_added": 71
+    },
+    "221793": {
+      "release_groups_added": 80,
+      "releases_added": 1518,
+      "artists_added": 714,
+      "works_added": 14
+    },
+    "1985352": {
+      "release_groups_added": 6798,
+      "releases_added": 6932,
+      "artists_added": 1505,
+      "works_added": 0
+    },
+    "1232325": {
+      "release_groups_added": 10384,
+      "releases_added": 10355,
+      "artists_added": 7111,
+      "works_added": 0
+    },
+    "453127": {
+      "release_groups_added": 467,
+      "releases_added": 745,
+      "artists_added": 1313,
+      "works_added": 2394
+    },
+    "2143209": {
+      "release_groups_added": 3284,
+      "releases_added": 4034,
+      "artists_added": 1854,
+      "works_added": 511
+    },
+    "2116212": {
+      "release_groups_added": 79,
+      "releases_added": 78,
+      "artists_added": 347,
+      "works_added": 277
+    },
+    "133198": {
+      "release_groups_added": 276,
+      "releases_added": 1514,
+      "artists_added": 659,
+      "works_added": 189
+    },
+    "2621238": {
+      "release_groups_added": 1985,
+      "releases_added": 2808,
+      "artists_added": 1084,
+      "works_added": 639
+    },
+    "2121591": {
+      "release_groups_added": 1760,
+      "releases_added": 1846,
+      "artists_added": 10517,
+      "works_added": 89
+    },
+    "1658632": {
+      "release_groups_added": 215,
+      "releases_added": 612,
+      "artists_added": 245,
+      "works_added": 2235
+    },
+    "2029433": {
+      "release_groups_added": 6261,
+      "releases_added": 6472,
+      "artists_added": 10542,
+      "works_added": 83
+    },
+    "2684348": {
+      "release_groups_added": 534,
+      "releases_added": 1397,
+      "artists_added": 173,
+      "works_added": 896
+    },
+    "342956": {
+      "release_groups_added": 4793,
+      "releases_added": 12869,
+      "artists_added": 8166,
+      "works_added": 0
+    },
+    "1307775": {
+      "release_groups_added": 3044,
+      "releases_added": 3736,
+      "artists_added": 6319,
+      "works_added": 214
+    },
+    "2438733": {
+      "release_groups_added": 1888,
+      "releases_added": 4070,
+      "artists_added": 579,
+      "works_added": 775
+    },
+    "1950056": {
+      "release_groups_added": 4131,
+      "releases_added": 5014,
+      "artists_added": 2047,
+      "works_added": 0
+    },
+    "2440808": {
+      "release_groups_added": 1441,
+      "releases_added": 1521,
+      "artists_added": 1056,
+      "works_added": 2817
+    },
+    "606116": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "2476111": {
+      "release_groups_added": 385,
+      "releases_added": 873,
+      "artists_added": 1002,
+      "works_added": 2010
+    },
+    "2598316": {
+      "release_groups_added": 3108,
+      "releases_added": 3171,
+      "artists_added": 700,
+      "works_added": 1180
+    },
+    "2122608": {
+      "release_groups_added": 1070,
+      "releases_added": 1461,
+      "artists_added": 246,
+      "works_added": 986
+    },
+    "158184": {
+      "release_groups_added": 442,
+      "releases_added": 453,
+      "artists_added": 3,
+      "works_added": 44
+    },
+    "418819": {
+      "release_groups_added": 398,
+      "releases_added": 897,
+      "artists_added": 218,
+      "works_added": 38
+    },
+    "470731": {
+      "release_groups_added": 95,
+      "releases_added": 604,
+      "artists_added": 276,
+      "works_added": 167
+    },
+    "2124592": {
+      "release_groups_added": 3513,
+      "releases_added": 4568,
+      "artists_added": 616,
+      "works_added": 244
+    },
+    "566387": {
+      "release_groups_added": 2842,
+      "releases_added": 5670,
+      "artists_added": 67,
+      "works_added": 0
+    },
+    "2028183": {
+      "release_groups_added": 748,
+      "releases_added": 1335,
+      "artists_added": 1150,
+      "works_added": 676
+    },
+    "2069085": {
+      "release_groups_added": 6089,
+      "releases_added": 6401,
+      "artists_added": 1780,
+      "works_added": 0
+    },
+    "64411": {
+      "release_groups_added": 981,
+      "releases_added": 1940,
+      "artists_added": 1074,
+      "works_added": 478
+    },
+    "2368913": {
+      "release_groups_added": 334,
+      "releases_added": 581,
+      "artists_added": 766,
+      "works_added": 50
+    },
+    "637561": {
+      "release_groups_added": 940,
+      "releases_added": 964,
+      "artists_added": 180,
+      "works_added": 3126
+    },
+    "20915": {
+      "release_groups_added": 73,
+      "releases_added": 506,
+      "artists_added": 1589,
+      "works_added": 2222
+    },
+    "2": {
+      "release_groups_added": 0,
+      "releases_added": 59971,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "526863": {
+      "release_groups_added": 822,
+      "releases_added": 1078,
+      "artists_added": 1364,
+      "works_added": 1798
+    },
+    "2039816": {
+      "release_groups_added": 434,
+      "releases_added": 451,
+      "artists_added": 157,
+      "works_added": 1135
+    },
+    "169095": {
+      "release_groups_added": 85,
+      "releases_added": 334,
+      "artists_added": 1282,
+      "works_added": 593
+    },
+    "1681849": {
+      "release_groups_added": 2070,
+      "releases_added": 4701,
+      "artists_added": 573,
+      "works_added": 48
+    },
+    "2495509": {
+      "release_groups_added": 1259,
+      "releases_added": 1589,
+      "artists_added": 643,
+      "works_added": 161
+    },
+    "11100": {
+      "release_groups_added": 73,
+      "releases_added": 2135,
+      "artists_added": 873,
+      "works_added": 22
+    },
+    "2122999": {
+      "release_groups_added": 1356,
+      "releases_added": 1466,
+      "artists_added": 1736,
+      "works_added": 1031
+    },
+    "2181167": {
+      "release_groups_added": 127,
+      "releases_added": 768,
+      "artists_added": 87,
+      "works_added": 545
+    },
+    "1516984": {
+      "release_groups_added": 258,
+      "releases_added": 1450,
+      "artists_added": 69,
+      "works_added": 0
+    },
+    "133310": {
+      "release_groups_added": 464,
+      "releases_added": 915,
+      "artists_added": 1273,
+      "works_added": 3782
+    },
+    "155226": {
+      "release_groups_added": 88,
+      "releases_added": 200,
+      "artists_added": 249,
+      "works_added": 1419
+    },
+    "297887": {
+      "release_groups_added": 3002,
+      "releases_added": 3142,
+      "artists_added": 2870,
+      "works_added": 2184
+    },
+    "2439112": {
+      "release_groups_added": 5536,
+      "releases_added": 5814,
+      "artists_added": 1705,
+      "works_added": 0
+    },
+    "193022": {
+      "release_groups_added": 954,
+      "releases_added": 2333,
+      "artists_added": 1305,
+      "works_added": 438
+    },
+    "2134575": {
+      "release_groups_added": 865,
+      "releases_added": 1974,
+      "artists_added": 1687,
+      "works_added": 1379
+    },
+    "214929": {
+      "release_groups_added": 549,
+      "releases_added": 1258,
+      "artists_added": 593,
+      "works_added": 0
+    },
+    "1358990": {
+      "release_groups_added": 501,
+      "releases_added": 943,
+      "artists_added": 842,
+      "works_added": 1161
+    },
+    "2180134": {
+      "release_groups_added": 695,
+      "releases_added": 806,
+      "artists_added": 427,
+      "works_added": 166
+    },
+    "519178": {
+      "release_groups_added": 2222,
+      "releases_added": 4266,
+      "artists_added": 1792,
+      "works_added": 1106
+    },
+    "385620": {
+      "release_groups_added": 747,
+      "releases_added": 1296,
+      "artists_added": 1106,
+      "works_added": 794
+    },
+    "422110": {
+      "release_groups_added": 979,
+      "releases_added": 2136,
+      "artists_added": 659,
+      "works_added": 1897
+    },
+    "449206": {
+      "release_groups_added": 293,
+      "releases_added": 372,
+      "artists_added": 154,
+      "works_added": 127
+    },
+    "595467": {
+      "release_groups_added": 2390,
+      "releases_added": 3576,
+      "artists_added": 1484,
+      "works_added": 432
+    },
+    "500215": {
+      "release_groups_added": 946,
+      "releases_added": 1286,
+      "artists_added": 1250,
+      "works_added": 1778
+    },
+    "83657": {
+      "release_groups_added": 277,
+      "releases_added": 1022,
+      "artists_added": 803,
+      "works_added": 225
+    },
+    "1940795": {
+      "release_groups_added": 321,
+      "releases_added": 628,
+      "artists_added": 651,
+      "works_added": 1440
+    },
+    "311387": {
+      "release_groups_added": 480,
+      "releases_added": 1426,
+      "artists_added": 3465,
+      "works_added": 4137
+    },
+    "332862": {
+      "release_groups_added": 605,
+      "releases_added": 881,
+      "artists_added": 701,
+      "works_added": 2051
+    },
+    "1690940": {
+      "release_groups_added": 2850,
+      "releases_added": 2991,
+      "artists_added": 842,
+      "works_added": 0
+    },
+    "1312823": {
+      "release_groups_added": 3387,
+      "releases_added": 4085,
+      "artists_added": 1642,
+      "works_added": 4413
+    },
+    "2253166": {
+      "release_groups_added": 1064,
+      "releases_added": 1650,
+      "artists_added": 108,
+      "works_added": 348
+    },
+    "678525": {
+      "release_groups_added": 225,
+      "releases_added": 448,
+      "artists_added": 1306,
+      "works_added": 2133
+    },
+    "1273020": {
+      "release_groups_added": 78,
+      "releases_added": 229,
+      "artists_added": 121,
+      "works_added": 104
+    },
+    "2434209": {
+      "release_groups_added": 1071,
+      "releases_added": 3091,
+      "artists_added": 140,
+      "works_added": 213
+    },
+    "131974": {
+      "release_groups_added": 303,
+      "releases_added": 1017,
+      "artists_added": 723,
+      "works_added": 42
+    },
+    "1027816": {
+      "release_groups_added": 70,
+      "releases_added": 81,
+      "artists_added": 147,
+      "works_added": 402
+    },
+    "2470204": {
+      "release_groups_added": 5374,
+      "releases_added": 5611,
+      "artists_added": 922,
+      "works_added": 0
+    },
+    "702926": {
+      "release_groups_added": 284,
+      "releases_added": 662,
+      "artists_added": 897,
+      "works_added": 1010
+    },
+    "1274938": {
+      "release_groups_added": 640,
+      "releases_added": 862,
+      "artists_added": 475,
+      "works_added": 2135
+    },
+    "73463": {
+      "release_groups_added": 0,
+      "releases_added": 2502,
+      "artists_added": 2166,
+      "works_added": 0
+    },
+    "798287": {
+      "release_groups_added": 1520,
+      "releases_added": 2630,
+      "artists_added": 2920,
+      "works_added": 3
+    },
+    "2442694": {
+      "release_groups_added": 546,
+      "releases_added": 779,
+      "artists_added": 112,
+      "works_added": 1314
+    },
+    "2368708": {
+      "release_groups_added": 2570,
+      "releases_added": 3031,
+      "artists_added": 1191,
+      "works_added": 1030
+    },
+    "2380269": {
+      "release_groups_added": 2014,
+      "releases_added": 3485,
+      "artists_added": 406,
+      "works_added": 1689
+    },
+    "2021714": {
+      "release_groups_added": 301,
+      "releases_added": 441,
+      "artists_added": 84,
+      "works_added": 553
+    },
+    "196502": {
+      "release_groups_added": 1678,
+      "releases_added": 2330,
+      "artists_added": 1051,
+      "works_added": 1539
+    },
+    "577491": {
+      "release_groups_added": 963,
+      "releases_added": 1381,
+      "artists_added": 721,
+      "works_added": 1785
+    },
+    "2084779": {
+      "release_groups_added": 299,
+      "releases_added": 525,
+      "artists_added": 240,
+      "works_added": 1801
+    },
+    "2576237": {
+      "release_groups_added": 1242,
+      "releases_added": 1450,
+      "artists_added": 414,
+      "works_added": 0
+    },
+    "2097007": {
+      "release_groups_added": 5634,
+      "releases_added": 5737,
+      "artists_added": 3034,
+      "works_added": 2
+    },
+    "177911": {
+      "release_groups_added": 869,
+      "releases_added": 2435,
+      "artists_added": 452,
+      "works_added": 1023
+    },
+    "1551856": {
+      "release_groups_added": 336,
+      "releases_added": 486,
+      "artists_added": 836,
+      "works_added": 2165
+    },
+    "1759961": {
+      "release_groups_added": 263,
+      "releases_added": 484,
+      "artists_added": 485,
+      "works_added": 1984
+    },
+    "94387": {
+      "release_groups_added": 49,
+      "releases_added": 637,
+      "artists_added": 1438,
+      "works_added": 37
+    },
+    "51298": {
+      "release_groups_added": 0,
+      "releases_added": 366,
+      "artists_added": 108,
+      "works_added": 0
+    },
+    "2212707": {
+      "release_groups_added": 233,
+      "releases_added": 300,
+      "artists_added": 159,
+      "works_added": 355
+    },
+    "2067498": {
+      "release_groups_added": 114,
+      "releases_added": 164,
+      "artists_added": 141,
+      "works_added": 343
+    },
+    "2023393": {
+      "release_groups_added": 39,
+      "releases_added": 262,
+      "artists_added": 600,
+      "works_added": 773
+    },
+    "21079": {
+      "release_groups_added": 2300,
+      "releases_added": 3124,
+      "artists_added": 1156,
+      "works_added": 870
+    },
+    "2021071": {
+      "release_groups_added": 288,
+      "releases_added": 724,
+      "artists_added": 434,
+      "works_added": 4619
+    },
+    "2270506": {
+      "release_groups_added": 140,
+      "releases_added": 222,
+      "artists_added": 604,
+      "works_added": 1506
+    },
+    "1777178": {
+      "release_groups_added": 3281,
+      "releases_added": 3661,
+      "artists_added": 1545,
+      "works_added": 83
+    },
+    "2605996": {
+      "release_groups_added": 3639,
+      "releases_added": 3945,
+      "artists_added": 231,
+      "works_added": 0
+    },
+    "1492949": {
+      "release_groups_added": 141,
+      "releases_added": 168,
+      "artists_added": 392,
+      "works_added": 1614
+    },
+    "522345": {
+      "release_groups_added": 102,
+      "releases_added": 152,
+      "artists_added": 1107,
+      "works_added": 2330
+    },
+    "397675": {
+      "release_groups_added": 86,
+      "releases_added": 180,
+      "artists_added": 415,
+      "works_added": 842
+    },
+    "2330342": {
+      "release_groups_added": 94,
+      "releases_added": 147,
+      "artists_added": 136,
+      "works_added": 811
+    },
+    "1802546": {
+      "release_groups_added": 8282,
+      "releases_added": 8361,
+      "artists_added": 2718,
+      "works_added": 0
+    },
+    "482738": {
+      "release_groups_added": 2020,
+      "releases_added": 2882,
+      "artists_added": 1859,
+      "works_added": 935
+    },
+    "2292802": {
+      "release_groups_added": 5571,
+      "releases_added": 5910,
+      "artists_added": 1138,
+      "works_added": 0
+    },
+    "197490": {
+      "release_groups_added": 0,
+      "releases_added": 323,
+      "artists_added": 55,
+      "works_added": 0
+    },
+    "151561": {
+      "release_groups_added": 128,
+      "releases_added": 647,
+      "artists_added": 1613,
+      "works_added": 1341
+    },
+    "692202": {
+      "release_groups_added": 1311,
+      "releases_added": 1711,
+      "artists_added": 145,
+      "works_added": 32
+    },
+    "1283651": {
+      "release_groups_added": 5,
+      "releases_added": 4,
+      "artists_added": 20604,
+      "works_added": 0
+    },
+    "2786444": {
+      "release_groups_added": 709,
+      "releases_added": 712,
+      "artists_added": 95,
+      "works_added": 57
+    },
+    "518894": {
+      "release_groups_added": 4405,
+      "releases_added": 5703,
+      "artists_added": 922,
+      "works_added": 323
+    },
+    "1831456": {
+      "release_groups_added": 9416,
+      "releases_added": 9422,
+      "artists_added": 1384,
+      "works_added": 0
+    },
+    "1399353": {
+      "release_groups_added": 339,
+      "releases_added": 1141,
+      "artists_added": 510,
+      "works_added": 2205
+    },
+    "232535": {
+      "release_groups_added": 225,
+      "releases_added": 335,
+      "artists_added": 1428,
+      "works_added": 6579
+    },
+    "2040792": {
+      "release_groups_added": 1515,
+      "releases_added": 3130,
+      "artists_added": 181,
+      "works_added": 292
+    },
+    "1961550": {
+      "release_groups_added": 1280,
+      "releases_added": 2877,
+      "artists_added": 536,
+      "works_added": 1584
+    },
+    "232267": {
+      "release_groups_added": 34,
+      "releases_added": 325,
+      "artists_added": 797,
+      "works_added": 116
+    },
+    "2118563": {
+      "release_groups_added": 589,
+      "releases_added": 1255,
+      "artists_added": 99,
+      "works_added": 429
+    },
+    "2191230": {
+      "release_groups_added": 3573,
+      "releases_added": 3578,
+      "artists_added": 1625,
+      "works_added": 0
+    },
+    "1284700": {
+      "release_groups_added": 2937,
+      "releases_added": 3461,
+      "artists_added": 1081,
+      "works_added": 8
+    },
+    "2372907": {
+      "release_groups_added": 545,
+      "releases_added": 1252,
+      "artists_added": 1345,
+      "works_added": 2614
+    },
+    "2078154": {
+      "release_groups_added": 739,
+      "releases_added": 1469,
+      "artists_added": 839,
+      "works_added": 379
+    },
+    "2155835": {
+      "release_groups_added": 567,
+      "releases_added": 660,
+      "artists_added": 1773,
+      "works_added": 746
+    },
+    "2616678": {
+      "release_groups_added": 312,
+      "releases_added": 592,
+      "artists_added": 960,
+      "works_added": 1508
+    },
+    "577622": {
+      "release_groups_added": 81,
+      "releases_added": 141,
+      "artists_added": 699,
+      "works_added": 890
+    },
+    "232747": {
+      "release_groups_added": 6270,
+      "releases_added": 8546,
+      "artists_added": 350,
+      "works_added": 0
+    },
+    "2486972": {
+      "release_groups_added": 88,
+      "releases_added": 550,
+      "artists_added": 240,
+      "works_added": 1274
+    },
+    "525772": {
+      "release_groups_added": 1121,
+      "releases_added": 1167,
+      "artists_added": 1953,
+      "works_added": 211
+    },
+    "751269": {
+      "release_groups_added": 1374,
+      "releases_added": 2436,
+      "artists_added": 974,
+      "works_added": 468
+    },
+    "514314": {
+      "release_groups_added": 2274,
+      "releases_added": 2595,
+      "artists_added": 1667,
+      "works_added": 859
+    },
+    "2330594": {
+      "release_groups_added": 243,
+      "releases_added": 291,
+      "artists_added": 308,
+      "works_added": 13917
+    },
+    "2609854": {
+      "release_groups_added": 1558,
+      "releases_added": 1564,
+      "artists_added": 302,
+      "works_added": 0
+    },
+    "702551": {
+      "release_groups_added": 2082,
+      "releases_added": 2684,
+      "artists_added": 733,
+      "works_added": 357
+    },
+    "328771": {
+      "release_groups_added": 439,
+      "releases_added": 1487,
+      "artists_added": 1212,
+      "works_added": 336
+    },
+    "2210025": {
+      "release_groups_added": 319,
+      "releases_added": 518,
+      "artists_added": 786,
+      "works_added": 0
+    },
+    "77802": {
+      "release_groups_added": 19,
+      "releases_added": 473,
+      "artists_added": 9,
+      "works_added": 0
+    },
+    "1790794": {
+      "release_groups_added": 924,
+      "releases_added": 1480,
+      "artists_added": 107,
+      "works_added": 142
+    },
+    "217402": {
+      "release_groups_added": 829,
+      "releases_added": 1328,
+      "artists_added": 765,
+      "works_added": 176
+    },
+    "2077426": {
+      "release_groups_added": 913,
+      "releases_added": 1445,
+      "artists_added": 792,
+      "works_added": 710
+    },
+    "2435143": {
+      "release_groups_added": 1326,
+      "releases_added": 1344,
+      "artists_added": 255,
+      "works_added": 1107
+    },
+    "87165": {
+      "release_groups_added": 2143,
+      "releases_added": 3240,
+      "artists_added": 1928,
+      "works_added": 25
+    },
+    "211185": {
+      "release_groups_added": 2976,
+      "releases_added": 4611,
+      "artists_added": 2235,
+      "works_added": 3
+    },
+    "803590": {
+      "release_groups_added": 179,
+      "releases_added": 314,
+      "artists_added": 702,
+      "works_added": 612
+    },
+    "548004": {
+      "release_groups_added": 12836,
+      "releases_added": 12765,
+      "artists_added": 2577,
+      "works_added": 0
+    },
+    "2072172": {
+      "release_groups_added": 180,
+      "releases_added": 296,
+      "artists_added": 266,
+      "works_added": 1287
+    },
+    "319964": {
+      "release_groups_added": 488,
+      "releases_added": 639,
+      "artists_added": 883,
+      "works_added": 920
+    },
+    "248900": {
+      "release_groups_added": 3716,
+      "releases_added": 4352,
+      "artists_added": 1527,
+      "works_added": 24
+    },
+    "178873": {
+      "release_groups_added": 1520,
+      "releases_added": 1673,
+      "artists_added": 2358,
+      "works_added": 2823
+    },
+    "2220475": {
+      "release_groups_added": 150,
+      "releases_added": 767,
+      "artists_added": 520,
+      "works_added": 2527
+    },
+    "563458": {
+      "release_groups_added": 3616,
+      "releases_added": 4027,
+      "artists_added": 1436,
+      "works_added": 0
+    },
+    "150844": {
+      "release_groups_added": 608,
+      "releases_added": 1236,
+      "artists_added": 739,
+      "works_added": 347
+    },
+    "2398755": {
+      "release_groups_added": 1707,
+      "releases_added": 1991,
+      "artists_added": 577,
+      "works_added": 52
+    },
+    "2267466": {
+      "release_groups_added": 1138,
+      "releases_added": 1196,
+      "artists_added": 2449,
+      "works_added": 1470
+    },
+    "273841": {
+      "release_groups_added": 549,
+      "releases_added": 1014,
+      "artists_added": 1989,
+      "works_added": 989
+    },
+    "1337863": {
+      "release_groups_added": 3079,
+      "releases_added": 3368,
+      "artists_added": 2288,
+      "works_added": 479
+    },
+    "504957": {
+      "release_groups_added": 989,
+      "releases_added": 1888,
+      "artists_added": 1082,
+      "works_added": 1206
+    },
+    "2093072": {
+      "release_groups_added": 1342,
+      "releases_added": 2016,
+      "artists_added": 291,
+      "works_added": 1127
+    },
+    "1980580": {
+      "release_groups_added": 442,
+      "releases_added": 526,
+      "artists_added": 772,
+      "works_added": 1899
+    },
+    "559114": {
+      "release_groups_added": 1589,
+      "releases_added": 2016,
+      "artists_added": 822,
+      "works_added": 223
+    },
+    "2121553": {
+      "release_groups_added": 346,
+      "releases_added": 799,
+      "artists_added": 255,
+      "works_added": 624
+    },
+    "228211": {
+      "release_groups_added": 257,
+      "releases_added": 652,
+      "artists_added": 1888,
+      "works_added": 1751
+    },
+    "2217990": {
+      "release_groups_added": 1326,
+      "releases_added": 1534,
+      "artists_added": 444,
+      "works_added": 457
+    },
+    "220174": {
+      "release_groups_added": 84,
+      "releases_added": 1121,
+      "artists_added": 1110,
+      "works_added": 623
+    },
+    "1099141": {
+      "release_groups_added": 870,
+      "releases_added": 1660,
+      "artists_added": 1080,
+      "works_added": 2080
+    },
+    "2146458": {
+      "release_groups_added": 792,
+      "releases_added": 997,
+      "artists_added": 104,
+      "works_added": 334
+    },
+    "326485": {
+      "release_groups_added": 967,
+      "releases_added": 3518,
+      "artists_added": 1118,
+      "works_added": 58
+    },
+    "121829": {
+      "release_groups_added": 79,
+      "releases_added": 2799,
+      "artists_added": 1267,
+      "works_added": 156
+    },
+    "701933": {
+      "release_groups_added": 0,
+      "releases_added": 0,
+      "artists_added": 0,
+      "works_added": 0
+    },
+    "2049372": {
+      "release_groups_added": 80,
+      "releases_added": 80,
+      "artists_added": 463,
+      "works_added": 697
+    },
+    "1731330": {
+      "release_groups_added": 2662,
+      "releases_added": 2921,
+      "artists_added": 2331,
+      "works_added": 1038
+    },
+    "2853867": {
+      "release_groups_added": 40,
+      "releases_added": 87,
+      "artists_added": 24,
+      "works_added": 489
+    },
+    "2059188": {
+      "release_groups_added": 588,
+      "releases_added": 1017,
+      "artists_added": 250,
+      "works_added": 1338
+    }
+  }
+}
