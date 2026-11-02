@@ -38,6 +38,11 @@ BUFFER = 4 * 1024 * 1024
 TOP_EDITORS = 500
 TOP_DISCUSSIONS = 20_000
 
+# MusicBrainz edit type constants for successful creation edits.
+# Release creation includes the historical ADD_RELEASE (216) type.
+# Indices: release groups, releases, artists, works.
+CREATION_EDIT_TYPES = {b"20": 0, b"31": 1, b"216": 1, b"1": 2, b"41": 3}
+
 
 def log(message: str) -> None:
     print(message, flush=True)
@@ -167,9 +172,10 @@ def note_top_counts(tar_path: Path, n: int) -> tuple[list[tuple[int, int]], int]
     return top, scanned
 
 
-def scan_edits(tar_path: Path, target_ids: set[int]) -> tuple[dict[int, int], dict[int, dict], int]:
+def scan_edits(tar_path: Path, target_ids: set[int]) -> tuple[dict[int, int], dict[int, dict], int, dict[int, list[int]]]:
     log("Pass 2: counting all applied edits and resolving discussion edit details")
     applied: dict[int, int] = defaultdict(int)
+    created: dict[int, list[int]] = defaultdict(lambda: [0, 0, 0, 0])
     details: dict[int, dict] = {}
     pending = target_ids.copy()
     scanned = 0
@@ -186,6 +192,9 @@ def scan_edits(tar_path: Path, target_ids: set[int]) -> tuple[dict[int, int], di
         scanned += 1
         if status == 2:
             applied[editor_id] += 1
+            category = CREATION_EDIT_TYPES.get(fields[2])
+            if category is not None:
+                created[editor_id][category] += 1
         if edit_id in pending:
             try:
                 edit_type = int(fields[2])
@@ -203,7 +212,7 @@ def scan_edits(tar_path: Path, target_ids: set[int]) -> tuple[dict[int, int], di
     log(f"  counted {scanned:,} edit rows, applied edits for {len(applied):,} editors")
     if pending:
         log(f"  warning: {len(pending):,} note-bearing edits had no edit row")
-    return applied, details, scanned
+    return applied, details, scanned, created
 
 
 def copy_unescape(value: bytes) -> str:
@@ -272,7 +281,7 @@ def generate(edit_dump: Path, editor_dump: Path, dump_id: str, out: Path, repo_r
         edit_dump, iter_member_lines, top_n=votes_top
     )
     selected_ids = {edit for _, edit in top_notes} | set(voted_ids)
-    counts, edit_details, total_edits = scan_edits(edit_dump, selected_ids)
+    counts, edit_details, total_edits, created = scan_edits(edit_dump, selected_ids)
     top_editors = heapq.nlargest(TOP_EDITORS, counts.items(), key=lambda item: (item[1], item[0]))
     needed_names = {eid for eid, _ in top_editors}
     needed_names.update(record["editor_id"] for record in edit_details.values()
@@ -300,6 +309,20 @@ def generate(edit_dump: Path, editor_dump: Path, dump_id: str, out: Path, repo_r
         })
 
     write_json(out / "TopEditors" / "json" / f"{date}.json", top_rows)
+    # Latest-only supplementary data: historical leaderboard snapshots stay
+    # unchanged. Store counts for the current top 500, keyed by editor ID.
+    contribution_rows = {}
+    for editor_id, _ in top_editors:
+        release_groups, releases, artists, works = created.get(editor_id, (0, 0, 0, 0))
+        contribution_rows[str(editor_id)] = {
+            "release_groups_added": release_groups,
+            "releases_added": releases,
+            "artists_added": artists,
+            "works_added": works,
+        }
+    write_json(out / "TopEditors" / "contributions.json", {
+        "snapshot_date": date, "editors": contribution_rows,
+    })
     current_manifest = repo_root / "TopEditors" / "manifest.json"
     old_manifest = json.loads(current_manifest.read_text("utf-8")) if current_manifest.exists() else []
     manifest = [entry for entry in old_manifest if entry.get("date") != date]
@@ -326,7 +349,8 @@ def generate(edit_dump: Path, editor_dump: Path, dump_id: str, out: Path, repo_r
         "dump_id": dump_id, "snapshot_date": date,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "notes_scanned": total_notes, "edits_scanned": total_edits,
-        "top_editor_rows": len(top_rows), "discussion_rows": len(discussions),
+        "top_editor_rows": len(top_rows), "contribution_editors": len(contribution_rows),
+        "discussion_rows": len(discussions),
         "top_voted_rows": len(voted_rows), **vote_stats,
         "seconds": round(time.monotonic() - start, 2),
         "publishing": "caller controlled; generator performs no Git writes",
