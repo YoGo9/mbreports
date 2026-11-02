@@ -1,0 +1,34 @@
+name: Validate Top Editors contributions
+
+on:
+  push:
+    branches: [feature-top-editors-contributions]
+    paths:
+      - ".github/workflows/test-top-editor-contributions.yml"
+      - "tools/musicbrainz_weekly_actions.py"
+      - "tools/musicbrainz_weekly_selftest.py"
+      - "TopEditors/index.html"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Python syntax
+        run: python3 -m py_compile tools/musicbrainz_weekly_actions.py tools/musicbrainz_weekly_selftest.py
+      - name: Run full synthetic regressions with latest-only contributions
+        run: python3 tools/musicbrainz_weekly_selftest.py
+      - name: Check dashboard JavaScript syntax
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          source = Path('TopEditors/index.html').read_text()
+          code = source.split('<script>', 1)[1].split('</script>', 1)[0]
+          Path('/tmp/top-editors-dashboard.js').write_text(code)
+          PY
+          node --check /tmp/top-editors-dashboard.js
