@@ -76,7 +76,7 @@
 
 
 table{
-  min-width:1400px;
+  min-width:1140px;
 }
 .vote-yes{color:#3fb950;font-weight:600;}
 .vote-no{color:#ff7b7b;font-weight:600;}
@@ -149,8 +149,6 @@ Changed/superseded votes are excluded.<br>
         <option value="no_votes">No votes</option>
         <option value="abstain_votes">Abstain votes</option>
         <option value="approve_votes">Approve votes</option>
-        <option value="admin_approve_votes">Admin approve</option>
-        <option value="admin_reject_votes">Admin reject</option>
         <option value="open_time">Opened</option>
       </select>
     </div>
@@ -216,8 +214,6 @@ Changed/superseded votes are excluded.<br>
       <th data-key="no_votes">No</th>
       <th data-key="abstain_votes">Abstain</th>
       <th data-key="approve_votes">Approve</th>
-      <th data-key="admin_approve_votes">Admin +</th>
-      <th data-key="admin_reject_votes">Admin −</th>
       <th data-key="editor_id">Editor</th>
       <th data-key="edit_type">Type</th>
       <th data-key="edit_status">Status</th>
@@ -543,7 +539,7 @@ function render(){
   if(!filtered.length){
     tbody.innerHTML =
       '<tr class="empty">' +
-      '<td colspan="13">No edits match the current filters.</td>' +
+      '<td colspan="11">No edits match the current filters.</td>' +
       '</tr>';
 
     $("paginationRow").style.display = "none";
@@ -637,14 +633,6 @@ function render(){
 
         <td>
           ${Number(r.approve_votes || 0).toLocaleString()}
-        </td>
-
-        <td>
-          ${Number(r.admin_approve_votes || 0).toLocaleString()}
-        </td>
-
-        <td>
-          ${Number(r.admin_reject_votes || 0).toLocaleString()}
         </td>
 
         <td title="editor #${esc(r.editor_id ?? "?")}">
@@ -749,8 +737,6 @@ $("exportCsv").addEventListener("click", () => {
     "no_votes",
     "abstain_votes",
     "approve_votes",
-    "admin_approve_votes",
-    "admin_reject_votes",
     "editor_id",
     "editor_name",
     "edit_type",
