@@ -456,6 +456,90 @@
     }
 
     .err-row td { color: var(--down); }
+
+    /* Phone view: a readable two-column contribution card per editor. */
+    .mobile-sort { display: none; }
+
+    @media (max-width: 760px) {
+      .wrap { padding: 18px 12px 50px; }
+      .header { margin-bottom: 16px; padding-bottom: 16px; gap: 14px; }
+      .title-block h1 { font-size: 22px; }
+      .snapshot-controls { width: 100%; }
+      .snapshot-controls > div:first-child { width: 100%; }
+      .snapshot-controls select { flex: 1; min-width: 0; max-width: 155px; }
+      .preset-btns { width: 100%; }
+      .preset-btn { flex: 1; padding: 7px 4px; font-size: 10px; }
+      .tabs { overflow-x: auto; white-space: nowrap; }
+      .tab { padding: 10px 12px; }
+      .toolbar { gap: 9px; }
+      #q { width: 100%; min-width: 0; flex: 1 1 100%; }
+      #rank-filter { width: 100%; flex-wrap: nowrap; overflow-x: auto; }
+      #rank-filter .pill { white-space: nowrap; }
+      .legend { display: none; }
+      .mobile-sort { display: flex; width: 100%; gap: 8px; align-items: center; }
+      .mobile-sort label {
+        color: var(--fg2); font: 11px var(--mono); white-space: nowrap;
+      }
+      .mobile-sort select { min-width: 0; flex: 1; height: 38px; }
+      #mobile-sort-dir {
+        height: 38px; min-width: 42px; color: var(--accent2);
+        border: 1px solid var(--border2); border-radius: 6px;
+        background: var(--surface); font: 17px var(--mono); cursor: pointer;
+      }
+      #mobile-sort-dir:active { background: var(--border2); }
+
+      #tab-table > .card { border: 0; background: transparent; overflow: visible; }
+      #tab-table > .card .card-scroll { overflow: visible; }
+      #main-table { width: 100%; min-width: 0; display: block; }
+      #main-table thead { display: none; }
+      #main-table tbody { display: grid; gap: 10px; }
+      #main-table tbody tr[data-id] {
+        display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 9px 10px; align-items: start; border: 1px solid var(--border2);
+        border-radius: 12px; background: var(--surface);
+        padding: 13px; overflow: hidden;
+      }
+      #main-table tbody tr[data-id] > td {
+        display: block; min-width: 0; padding: 0; text-align: left;
+        overflow-wrap: anywhere;
+      }
+      #main-table tbody tr[data-id] > td:nth-child(1) {
+        grid-column: 1 / -1; grid-row: 1;
+        font-size: 11px; color: var(--accent2); font-weight: 600;
+      }
+      #main-table tbody tr[data-id] > td:nth-child(1)::before { content: '#'; }
+      #main-table tbody tr[data-id] > td:nth-child(2) {
+        grid-column: 1 / -1; grid-row: 2;
+        font-size: 16px; line-height: 1.35; margin-bottom: 2px;
+      }
+      #main-table tbody tr[data-id] > td:nth-child(3) { grid-column: 1; grid-row: 3; font-weight: 600; }
+      #main-table tbody tr[data-id] > td:nth-child(4) { grid-column: 2; grid-row: 3; }
+      #main-table tbody tr[data-id] > td:nth-child(5) {
+        grid-column: 1 / -1; grid-row: 4;
+        padding: 0 0 10px; margin-bottom: 2px;
+        border-bottom: 1px solid var(--border);
+      }
+      #main-table tbody tr[data-id] > td:nth-child(n + 6) {
+        background: var(--bg); border: 1px solid var(--border);
+        border-radius: 8px; padding: 10px; font: 600 13px var(--mono);
+        font-variant-numeric: tabular-nums; overflow-wrap: normal;
+      }
+      #main-table tbody tr[data-id] > td:nth-child(6) { grid-column: 1; grid-row: 5; }
+      #main-table tbody tr[data-id] > td:nth-child(7) { grid-column: 2; grid-row: 5; }
+      #main-table tbody tr[data-id] > td:nth-child(8) { grid-column: 1; grid-row: 6; }
+      #main-table tbody tr[data-id] > td:nth-child(9) { grid-column: 2; grid-row: 6; }
+      #main-table tbody tr[data-id] > td:nth-child(n + 3)::before {
+        content: attr(data-label); display: block; margin-bottom: 5px;
+        font: 10px var(--mono); color: var(--fg2); text-transform: uppercase;
+        letter-spacing: .2px;
+      }
+      #main-table tbody tr.status-row,
+      #main-table tbody tr.err-row { display: block; }
+      #main-table tbody tr.status-row td,
+      #main-table tbody tr.err-row td { display: block; padding: 20px 8px; }
+      .modal { padding: 20px 16px; max-height: 90dvh; }
+      .modal-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
   </style>
 </head>
 <body>
@@ -497,6 +581,20 @@
         <button class="pill" data-top="50">Top 50</button>
         <button class="pill" data-top="10">Top 10</button>
       </div>
+      <div class="mobile-sort">
+        <label for="mobile-sort">Sort by</label>
+        <select id="mobile-sort" aria-label="Sort editors">
+          <option value="rank">Rank</option>
+          <option value="edits">Total edits</option>
+          <option value="rank_change">Rank change</option>
+          <option value="edits_change">Edit change</option>
+          <option value="release_groups_added">Release Groups</option>
+          <option value="releases_added">Releases</option>
+          <option value="artists_added">Artists</option>
+          <option value="works_added">Works</option>
+        </select>
+        <button type="button" id="mobile-sort-dir" aria-label="Reverse sort order" title="Reverse sort order">↑</button>
+      </div>
       <div class="legend">
         <span><span class="arrow-up">▲</span> up</span>
         <span><span class="arrow-down">▼</span> down</span>
@@ -512,12 +610,12 @@
               <th class="sortable" data-col="rank">#</th>
               <th>Editor</th>
               <th class="col-edits sortable" data-col="edits">Edits</th>
+              <th class="col-delta sortable" data-col="rank_change">Δ Rank</th>
+              <th class="col-delta sortable" data-col="edits_change">Δ Edits</th>
               <th class="col-creation sortable" data-col="release_groups_added" title="Applied Add Release Group edits; latest data only">Release Groups</th>
               <th class="col-creation sortable" data-col="releases_added" title="Applied Add Release edits, including historic releases; latest data only">Releases</th>
               <th class="col-creation sortable" data-col="artists_added" title="Applied Add Artist edits; latest data only">Artists</th>
               <th class="col-creation sortable" data-col="works_added" title="Applied Add Work edits; latest data only">Works</th>
-              <th class="col-delta sortable" data-col="rank_change">Δ Rank</th>
-              <th class="col-delta sortable" data-col="edits_change">Δ Edits</th>
             </tr>
           </thead>
           <tbody id="tbody">
@@ -708,13 +806,13 @@ function renderTable() {
     return `<tr data-id="${x.id}" data-name="${x.name}">
       <td class="col-rank">${x.rank}</td>
       <td class="col-name"><a class="link" href="${MB_URL(x.name)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${x.name}</a></td>
-      <td class="col-edits">${fmt(x.edits)}</td>
-      <td class="col-creation">${x.release_groups_added == null ? '—' : fmt(x.release_groups_added)}</td>
-      <td class="col-creation">${x.releases_added == null ? '—' : fmt(x.releases_added)}</td>
-      <td class="col-creation">${x.artists_added == null ? '—' : fmt(x.artists_added)}</td>
-      <td class="col-creation">${x.works_added == null ? '—' : fmt(x.works_added)}</td>
-      <td class="col-delta">${rankCell}</td>
-      <td class="col-delta">${editsCell}</td>
+      <td class="col-edits" data-label="Applied edits">${fmt(x.edits)}</td>
+      <td class="col-delta" data-label="Rank change">${rankCell}</td>
+      <td class="col-delta" data-label="Edit change">${editsCell || '—'}</td>
+      <td class="col-creation" data-label="Release groups">${x.release_groups_added == null ? '—' : fmt(x.release_groups_added)}</td>
+      <td class="col-creation" data-label="Releases">${x.releases_added == null ? '—' : fmt(x.releases_added)}</td>
+      <td class="col-creation" data-label="Artists">${x.artists_added == null ? '—' : fmt(x.artists_added)}</td>
+      <td class="col-creation" data-label="Works">${x.works_added == null ? '—' : fmt(x.works_added)}</td>
     </tr>`;
   }).join('');
 
@@ -989,17 +1087,36 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// Sorting
-document.querySelectorAll('thead th.sortable').forEach(th => {
+// Shared desktop + phone sorting; phone headers are hidden in card view.
+function applySort(col, direction) {
+  sortState.col = col;
+  sortState.dir = direction;
+  document.querySelectorAll('#main-table thead th.sortable').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (th.dataset.col === col) th.classList.add(direction === 1 ? 'sort-asc' : 'sort-desc');
+  });
+  const mobileSelect = document.getElementById('mobile-sort');
+  mobileSelect.value = col;
+  const dirButton = document.getElementById('mobile-sort-dir');
+  dirButton.textContent = direction === 1 ? '↑' : '↓';
+  dirButton.setAttribute('aria-label', direction === 1 ? 'Ascending, reverse sort' : 'Descending, reverse sort');
+  renderTable();
+}
+
+document.querySelectorAll('#main-table thead th.sortable').forEach(th => {
   th.addEventListener('click', () => {
     const col = th.dataset.col;
     if (!col) return;
-    sortState.dir = sortState.col === col ? -sortState.dir : (col === 'rank' ? 1 : -1);
-    sortState.col = col;
-    document.querySelectorAll('thead th.sortable').forEach(t => t.classList.remove('sort-asc','sort-desc'));
-    th.classList.add(sortState.dir === 1 ? 'sort-asc' : 'sort-desc');
-    renderTable();
+    applySort(col, sortState.col === col ? -sortState.dir : (col === 'rank' ? 1 : -1));
   });
+});
+
+document.getElementById('mobile-sort').addEventListener('change', event => {
+  const col = event.target.value;
+  applySort(col, col === 'rank' ? 1 : -1);
+});
+document.getElementById('mobile-sort-dir').addEventListener('click', () => {
+  applySort(sortState.col, -sortState.dir);
 });
 
 // Search
